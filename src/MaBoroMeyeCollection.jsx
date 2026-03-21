@@ -20,11 +20,13 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GOOGLE_SHEET_URL } from './config';
+import { useCart } from './CartContext';
 
 const COLORS_IMAGE = "/classic_colors.png";
 
 const LandingPage = () => {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [selectedColor, setSelectedColor] = useState('কালো');
 
     const heroImages = {
@@ -427,19 +429,37 @@ const LandingPage = () => {
                                                 <p className="text-2xl font-black text-center text-[#FF4D6D]">{totalPrice} ৳</p>
                                             </div>
 
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedColor(color.name);
-                                                    setSelectedType(itemType);
-                                                    setQuantity(itemQty);
-                                                    setSelectedSize(itemType === 'combo' ? `মা: ${itemSize}, বড় মেয়ে: ${babySize}` : (itemType === 'ma_single' ? itemSize : babySize));
-                                                    scrollToForm();
-                                                }}
-                                                className="w-full bg-[#FF4D6D] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#E63958] transition-all shadow-lg active:scale-95 shadow-[#FF4D6D]/20"
-                                            >
-                                                <ShoppingBag size={20} />
-                                                অর্ডার করুন
-                                            </button>
+                                            <div className="flex flex-col gap-3">
+                                                <button
+                                                    onClick={() => {
+                                                        addToCart({
+                                                            id: `maboro_${color.name}_${itemType}_${withHijab ? 'with_hijab' : 'no_hijab'}`,
+                                                            name: `মা-বড় মেয়ে ম্যাচিং - ${color.name} (${itemType})`,
+                                                            color: color.name,
+                                                            size: itemType === 'combo' ? `মা: ${itemSize}, বড় মেয়ে: ${babySize}` : (itemType === 'ma_single' ? itemSize : babySize),
+                                                            price: totalPrice / itemQty,
+                                                            quantity: itemQty,
+                                                            image: heroImages[color.name]
+                                                        });
+                                                    }}
+                                                    className="w-full bg-white text-[#FF4D6D] py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 border-2 border-[#FF4D6D] transition-all shadow-sm active:scale-95"
+                                                >
+                                                    <ShoppingBag size={20} />
+                                                    কার্টে যোগ করুন
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedColor(color.name);
+                                                        setSelectedType(itemType);
+                                                        setQuantity(itemQty);
+                                                        setSelectedSize(itemType === 'combo' ? `মা: ${itemSize}, বড় মেয়ে: ${babySize}` : (itemType === 'ma_single' ? itemSize : babySize));
+                                                        scrollToForm();
+                                                    }}
+                                                    className="w-full bg-[#FF4D6D] text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#E63958] transition-all shadow-lg active:scale-95 shadow-[#FF4D6D]/20"
+                                                >
+                                                    অর্ডার করুন
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>

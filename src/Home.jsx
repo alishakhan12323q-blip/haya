@@ -8,19 +8,10 @@ const Home = () => {
 
     const collections = [
         {
-            id: 'haya',
-            title: 'হায়া সিরিজ',
-            description: 'এলিগ্যান্ট ডিজাইন ও প্রিমিয়াম ফেব্রিক। শুধুমাত্র বোরকা অথবা হিজাবসহ সেট।',
-            image: '/hero_black.jpg',
-            price: '১৩৫০ ৳ থেকে শুরু',
-            path: '/haya',
-            color: 'bg-black'
-        },
-        {
             id: 'ma',
             title: 'মা কালেকশন',
             description: 'মায়েদের জন্য প্রিমিয়াম আরামদায়ক বোরকা ও বড় হিজাব সেট। (৮০ ইঞ্চি হিজাব)',
-            image: '/ma_black.jpg',
+            image: '/ma_cherry_black.png',
             price: '১১৯০ ৳ থেকে শুরু',
             path: '/ma',
             color: 'bg-black'
@@ -44,19 +35,10 @@ const Home = () => {
             color: 'bg-blue-900'
         },
         {
-            id: 'faiza',
-            title: 'ফাইজা বোরকা',
-            description: 'প্রিমিয়াম দুবাই চেরি কাপড়ের গর্জিয়াস স্টোনের ডিজাইন করা বোরকা ও হিজাব।',
-            image: '/faiza_black.jpg',
-            price: '৮৯০ ৳ থেকে শুরু',
-            path: '/faiza',
-            color: 'bg-[#1a1a1a]'
-        },
-        {
             id: 'borobon',
             title: 'বড়বোন বোরকা',
             description: 'বড়বোনদের জন্য প্রিমিয়াম ডিজাইনের বোরকা ও হিজাব সেট।',
-            image: '/borobon_black.jpg',
+            image: '/boro_bon_black.jpg',
             price: '৯৯০ ৳ থেকে শুরু',
             path: '/borobon',
             color: 'bg-black'
@@ -68,6 +50,24 @@ const Home = () => {
             image: '/ma_boro_meye_black.jpg',
             price: '৮৯০ ৳ থেকে শুরু',
             path: '/maboromeye',
+            color: 'bg-black'
+        },
+        {
+            id: 'faiza',
+            title: 'ফাইজা বোরকা',
+            description: 'প্রিমিয়াম দুবাই চেরি কাপড়ের গর্জিয়াস স্টোনের ডিজাইন করা বোরকা ও হিজাব।',
+            image: '/faiza_black.jpg',
+            price: '৮৯০ ৳ থেকে শুরু',
+            path: '/faiza',
+            color: 'bg-[#1a1a1a]'
+        },
+        {
+            id: 'haya',
+            title: 'হায়া সিরিজ',
+            description: 'এলিগ্যান্ট ডিজাইন ও প্রিমিয়াম ফেব্রিক। শুধুমাত্র বোরকা অথবা হিজাবসহ সেট।',
+            image: '/hero_black.jpg',
+            price: '১৩৫০ ৳ থেকে শুরু',
+            path: '/haya',
             color: 'bg-black'
         }
     ];

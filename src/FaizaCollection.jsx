@@ -19,9 +19,11 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GOOGLE_SHEET_URL } from './config';
+import { useCart } from './CartContext';
 
 const FaizaCollection = () => {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [selectedColor, setSelectedColor] = useState('কালো');
 
     const heroImages = {
@@ -239,16 +241,34 @@ const FaizaCollection = () => {
                                             </div>
                                         </div>
 
-                                        <button
-                                            onClick={() => {
-                                                setSelectedColor(color.name);
-                                                setHasHijab(withHijab);
-                                                scrollToForm();
-                                            }}
-                                            className="w-full bg-black text-white py-4 rounded-2xl font-bold mt-auto hover:bg-neutral-800 transition-all shadow-lg"
-                                        >
-                                            অর্ডার করুন
-                                        </button>
+                                        <div className="flex flex-col gap-3 mt-auto">
+                                            <button
+                                                onClick={() => {
+                                                    addToCart({
+                                                        id: `faiza_${color.name}_${withHijab ? 'with_hijab' : 'no_hijab'}`,
+                                                        name: `ফাইজা বোরকা - ${color.name} ${withHijab ? '(হিজাবসহ)' : '(সিঙ্গেল)'}`,
+                                                        color: color.name,
+                                                        size: selectedSize,
+                                                        price: price,
+                                                        quantity: 1,
+                                                        image: heroImages[color.name]
+                                                    });
+                                                }}
+                                                className="w-full bg-white text-black border-2 border-black py-3 rounded-2xl font-bold hover:bg-neutral-100 transition-all shadow-sm flex items-center justify-center gap-2"
+                                            >
+                                                <ShoppingBag size={20} /> কার্টে যোগ করুন
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedColor(color.name);
+                                                    setHasHijab(withHijab);
+                                                    scrollToForm();
+                                                }}
+                                                className="w-full bg-black text-white py-3 rounded-2xl font-bold hover:bg-neutral-800 transition-all shadow-lg"
+                                            >
+                                                অর্ডার করুন
+                                            </button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )

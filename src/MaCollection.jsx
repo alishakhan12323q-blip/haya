@@ -19,18 +19,20 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GOOGLE_SHEET_URL } from './config';
+import { useCart } from './CartContext';
 
 const MaCollection = () => {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [selectedColor, setSelectedColor] = useState('কালো');
 
     const heroImages = {
-        'কালো': '/ma_black.jpg',
-        'নীল': '/ma_blue.jpg',
-        'অলিভ': '/ma_olive.jpg',
-        'মেরুন': '/ma_maroon.jpg',
-        'কফি': '/ma_coffee.jpg',
-        'default': '/ma_black.jpg'
+        'কালো': '/ma_cherry_black.png',
+        'নীল': '/ma_cherry_blue.jpg',
+        'অলিভ': '/ma_cherry_olive.png',
+        'মেরুন': '/ma_cherry_maroon.png',
+        'কফি': '/ma_cherry_coffee.png',
+        'default': '/ma_cherry_black.png'
     };
 
     const currentHeroImage = heroImages[selectedColor] || heroImages['default'];
@@ -239,16 +241,34 @@ const MaCollection = () => {
                                             </div>
                                         </div>
 
-                                        <button
-                                            onClick={() => {
-                                                setSelectedColor(color.name);
-                                                setWithHijab(itemWithHijab);
-                                                scrollToForm();
-                                            }}
-                                            className="w-full bg-black text-white py-4 rounded-2xl font-bold mt-auto hover:bg-neutral-800 transition-all shadow-lg"
-                                        >
-                                            অর্ডার করুন
-                                        </button>
+                                        <div className="flex flex-col gap-3 mt-auto">
+                                            <button
+                                                onClick={() => {
+                                                    addToCart({
+                                                        id: `ma_${color.name}_${itemWithHijab ? 'with_hijab' : 'no_hijab'}`,
+                                                        name: `মা বোরকা - ${color.name} ${itemWithHijab ? '(হিজাবসহ)' : '(সিঙ্গেল)'}`,
+                                                        color: color.name,
+                                                        size: selectedSize,
+                                                        price: price,
+                                                        quantity: 1,
+                                                        image: heroImages[color.name]
+                                                    });
+                                                }}
+                                                className="w-full bg-white text-black border-2 border-black py-3 rounded-2xl font-bold hover:bg-neutral-100 transition-all shadow-sm flex items-center justify-center gap-2"
+                                            >
+                                                <ShoppingBag size={20} /> কার্টে যোগ করুন
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedColor(color.name);
+                                                    setWithHijab(itemWithHijab);
+                                                    scrollToForm();
+                                                }}
+                                                className="w-full bg-black text-white py-3 rounded-2xl font-bold hover:bg-neutral-800 transition-all shadow-lg"
+                                            >
+                                                অর্ডার করুন
+                                            </button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )
