@@ -20,7 +20,7 @@ const Home = () => {
             id: 'classic',
             title: 'মা-মেয়ে কম্বো',
             description: 'মা ও মেয়ের ম্যাচিং স্পেশাল কম্বো সেট। আমাদের সবচাইতে জনপ্রিয় কালেকশন।',
-            image: '/hero_olive.jpg', // Temporarily using olive for combo if missing
+            image: '/classic_combo_main.jpg',
             price: '১৬৮০ ৳ থেকে শুরু',
             path: '/classic',
             color: 'bg-[#556B2F]'
