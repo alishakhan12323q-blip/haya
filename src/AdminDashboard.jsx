@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase';
 import { collection, query, orderBy, onSnapshot, updateDoc, doc, deleteDoc, addDoc, serverTimestamp, where } from 'firebase/firestore';
+import ProductManagerView from './ProductManagerView';
 import {
     LayoutDashboard,
     ShoppingBag,
@@ -36,6 +37,7 @@ import {
     TrendingDown,
     Shield,
     Users,
+    User,
     CreditCard,
     QrCode,
     History
@@ -775,6 +777,7 @@ const AdminDashboard = () => {
                 <nav className="p-8 space-y-2">
                     {[
                         { id: 'dashboard', label: 'সেন্ট্রাল ম্যাপ', icon: <LayoutDashboard size={24} />, roles: ['Admin'] },
+                        { id: 'products', label: 'প্রোডাক্ট আপলোড', icon: <Package size={24} />, roles: ['Admin', 'Manager'] },
                         { id: 'orders', label: 'অর্ডার আর্কাইভ', icon: <ShoppingBag size={24} />, roles: ['Admin', 'Manager', 'Worker'] },
                         { id: 'add-order', label: 'অর্ডার এন্ট্রি', icon: <PlusCircle size={24} />, roles: ['Admin', 'Manager'] },
                         { id: 'factory-expenses', label: 'ফ্যাক্টরি ওভারহেড', icon: <Factory size={24} />, roles: ['Admin', 'Manager'] },
@@ -802,6 +805,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {activeTab === 'dashboard' && isAdmin && <DashboardView />}
+                {activeTab === 'products' && (isAdmin || isManager) && <ProductManagerView />}
                 {activeTab === 'orders' && (isAdmin || isManager || isWorker) && <OrderListView />}
                 {activeTab === 'add-order' && (isAdmin || isManager) && <AddOrderView />}
                 {activeTab === 'factory-expenses' && (isAdmin || isManager) && <FactoryExpenseView />}
