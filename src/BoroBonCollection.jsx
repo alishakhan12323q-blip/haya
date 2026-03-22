@@ -124,9 +124,8 @@ const BoroBonCollection = () => {
         <div className="min-h-screen bg-[#FDFBF7] font-bengali text-[#2D2D2D] overflow-x-hidden">
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md py-4 px-6 md:px-12 flex justify-between items-center border-b border-gray-100">
-                <div onClick={() => navigate('/')} className="text-2xl font-black tracking-tighter text-black flex items-center gap-2 cursor-pointer">
-                    <ShoppingBag className="text-black" />
-                    <span>NRZONE</span>
+                <div onClick={() => navigate('/')} className="flex items-center gap-2 cursor-pointer">
+                    <img src="/logo-dark.png" alt="NRzone Logo" className="h-[40px] md:h-[50px] object-contain" onError={(e)=>{e.target.style.display='none';}} />
                 </div>
                 <button
                     onClick={scrollToForm}

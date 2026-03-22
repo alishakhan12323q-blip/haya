@@ -8,9 +8,9 @@ export default {
         extend: {
             colors: {
                 premium: {
-                    gold: '#D4AF37',
-                    dark: '#1A1A1A',
-                    light: '#F5F5F7',
+                    gold: '#555555', // Updated from #D4AF37 to a mid/dark grey for B&W theme contrast
+                    dark: '#000000',
+                    light: '#FFFFFF',
                 }
             },
             fontFamily: {

@@ -185,10 +185,9 @@ const LandingPage = () => {
         <div className="min-h-screen bg-premium-light font-bengali text-premium-dark overflow-x-hidden">
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 glass-morphism py-4 px-6 md:px-12 flex justify-between items-center">
-                <div className="text-2xl font-bold tracking-tighter text-black flex items-center gap-2">
-                    <ShoppingBag className="text-black" />
-                    <span>NRZONE</span>
-                </div>
+                <a href="/" className="flex items-center gap-2 cursor-pointer">
+                    <img src="/logo-dark.png" alt="NRzone Logo" className="h-[40px] md:h-[50px] object-contain" onError={(e)=>{e.target.style.display='none';}} />
+                </a>
                 <div className="hidden md:flex gap-8 font-medium">
                     <a href="#features" className="hover:text-premium-gold transition-colors">কেন আমরা?</a>
                     <a href="#products" className="hover:text-premium-gold transition-colors">প্রোডাক্ট কালেকশন</a>
