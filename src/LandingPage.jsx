@@ -145,7 +145,7 @@ const LandingPage = () => {
             // 4. Automated SMS Notification
             if (SMS_API_KEY && SMS_API_KEY !== 'VoYeTuiZ7OH6ZW1rLFZf' && SMS_API_KEY !== 'PASTE_YOUR_API_KEY_HERE') {
                 const formattedNumber = formData.phone.trim().startsWith('88') ? formData.phone.trim() : `88${formData.phone.trim()}`;
-                const smsMessage = `প্রিয় ${formData.name}, NRZONE এ আপনার হায়া সিরিজ বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
+                const smsMessage = `প্রিয় ${formData.name}, NRZOONE এ আপনার অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
                 fetch(`${SMS_API_URL}?api_key=${encodeURIComponent(SMS_API_KEY)}&type=text&number=${encodeURIComponent(formattedNumber)}&senderid=${encodeURIComponent(SMS_SENDER_ID || '')}&message=${encodeURIComponent(smsMessage)}`, { mode: 'no-cors' })
                     .catch(err => console.error("SMS Error:", err));
             }
@@ -193,10 +193,10 @@ const LandingPage = () => {
                             🔥 স্টক শেষ হওয়ার আগেই অর্ডার করো!
                         </div>
                         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-                            প্রিমিয়াম <span className="text-premium-gold">হায়া সিরিজ</span> বোরকা কালেকশন
+                            প্রিমিয়াম <span className="text-premium-gold">NRZOONE</span> বোরকা কালেকশন
                         </h1>
                         <p className="text-lg text-gray-600 max-w-xl">
-                            এলিগ্যান্ট ডিজাইন ও আরামদায়ক প্রিমিয়াম ফেব্রিক দিয়ে তৈরি হায়া সিরিজ বোরকা। হিজাবসহ পুরো সেট অথবা শুধুমাত্র বোরকা হিসেবে সংগ্রহ করতে পারেন।
+                            এলিগ্যান্ট ডিজাইন ও আরামদায়ক প্রিমিয়াম ফেব্রিক দিয়ে তৈরি বোরকা। হিজাবসহ পুরো সেট অথবা শুধুমাত্র বোরকা হিসেবে সংগ্রহ করতে পারেন।
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                             <button
@@ -228,7 +228,7 @@ const LandingPage = () => {
                             {currentHeroImage ? (
                                 <img
                                     src={currentHeroImage}
-                                    alt="NRZONE Hero"
+                                    alt="NRZOONE Hero"
                                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 contrast-[1.02] brightness-[1.02] saturate-[1.05]"
                                 />
                             ) : (
@@ -683,7 +683,7 @@ const LandingPage = () => {
                         <div className="text-center md:text-left space-y-4">
                             <div className="text-3xl font-bold tracking-tighter text-black flex items-center justify-center md:justify-start gap-2">
                                 <ShoppingBag className="text-black" />
-                                <span>NRZONE</span>
+                                <span>NRZOONE</span>
                             </div>
                             <p className="text-gray-500 max-w-sm">প্রিমিয়াম কোয়ালিটি বোরকা এবং হিজাব কালেকশন। আমরা বিশ্বাস করি মডেস্টি মানেই আভিজাত্য।</p>
                         </div>
@@ -698,8 +698,8 @@ const LandingPage = () => {
                     </div>
 
                     <div className="pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500 font-medium">
-                        <p>© 2026 NRZONE | All Rights Reserved</p>
-                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZONE</span></p>
+                        <p>© 2026 NRZOONE | All Rights Reserved</p>
+                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZOONE</span></p>
                         <div className="flex gap-6">
                             <a href="#" className="hover:text-premium-dark transition-colors">প্রাইভেসি পলিসি</a>
                             <a href="#" className="hover:text-premium-dark transition-colors">টার্মস ও কন্ডিশন</a>

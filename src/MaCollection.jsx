@@ -120,7 +120,7 @@ const MaCollection = () => {
             // 4. Automated SMS Notification
             if (SMS_API_KEY && SMS_API_KEY !== 'VoYeTuiZ7OH6ZW1rLFZf' && SMS_API_KEY !== 'PASTE_YOUR_API_KEY_HERE') {
                 const formattedNumber = formData.phone.trim().startsWith('88') ? formData.phone.trim() : `88${formData.phone.trim()}`;
-                const smsMessage = `প্রিয় ${formData.name}, NRZONE এ আপনার মা কালেকশন বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
+                const smsMessage = `প্রিয় ${formData.name}, NRZOONE এ আপনার মা কালেকশন বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
                 fetch(`${SMS_API_URL}?api_key=${encodeURIComponent(SMS_API_KEY)}&type=text&number=${encodeURIComponent(formattedNumber)}&senderid=${encodeURIComponent(SMS_SENDER_ID || '')}&message=${encodeURIComponent(smsMessage)}`, { mode: 'no-cors' })
                     .catch(err => console.error("SMS Error:", err));
             }

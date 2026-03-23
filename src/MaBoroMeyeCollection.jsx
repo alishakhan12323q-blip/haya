@@ -715,7 +715,7 @@ const LandingPage = () => {
                         <div className="text-center md:text-left space-y-4">
                             <div className="text-3xl font-bold tracking-tighter text-black flex items-center justify-center md:justify-start gap-2">
                                 <ShoppingBag className="text-black" />
-                                <span>NRZONE</span>
+                                <span>NRZOONE</span>
                             </div>
                             <p className="text-gray-500 max-w-sm">প্রিমিয়াম কোয়ালিটি বোরকা এবং হিজাব কালেকশন। আমরা বিশ্বাস করি মডেস্টি মানেই আভিজাত্য।</p>
                         </div>
@@ -734,7 +734,7 @@ const LandingPage = () => {
 
                     <div className="pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500 font-medium">
                         <p>© 2026 NR Zone | All Rights Reserved</p>
-                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZONE</span></p>
+                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZOONE</span></p>
                         <div className="flex gap-6">
                             <a href="#" className="hover:text-premium-dark transition-colors">প্রাইভেসি পলিসি</a>
                             <a href="#" className="hover:text-premium-dark transition-colors">টার্মস ও কন্ডিশন</a>
