@@ -18,6 +18,7 @@ const ProductManagerView = () => {
         { id: 'borobon', name: 'বড়বোন কালেকশন' },
         { id: 'faiza', name: 'ফাইজা বোরকা' },
         { id: 'kids', name: 'কিডস কালেকশন' },
+        { id: 'hijab', name: 'হিজাব কালেকশন' },
     ]);
     const [newCatName, setNewCatName] = useState('');
 
@@ -26,15 +27,24 @@ const ProductManagerView = () => {
         category: 'haya',
         price: '',
         discountPrice: '',
-        colors: [], // Now an array
-        sizes: [],  // Now an array
+        colors: [],
+        sizes: [],
         imageUrl: '',
         stock: 'available',
         description: ''
     });
 
-    const commonColors = ['Black', 'Maroon', 'Olive', 'Navy', 'Blue', 'Green', 'Grey', 'Brown', 'Purple', 'White'];
-    const commonSizes = ['50', '52', '54', '56', '58', '60', 'Free Size'];
+    const commonColors = [
+        'Black', 'Maroon', 'Olive', 'Navy', 'Grey', 'Brown', 'Purple', 'White', 
+        'Pink', 'Mehndi', 'Coffee', 'Chocolate', 'Sky Blue', 'Teal', 'Lavender', 
+        'Emerald', 'Peach', 'Golden', 'Silver', 'Nude'
+    ];
+    
+    // Size range for Borka/General
+    const borkaSizes = Array.from({ length: (58 - 20) / 2 + 1 }, (_, i) => (20 + i * 2).toString());
+    const hijabSizes = ['40 Inchi (Choto)', '72 Inchi (Majhari)', '80 Inchi (Boro)'];
+    
+    const currentSizes = newProduct.category === 'hijab' ? hijabSizes : [...borkaSizes, 'Free Size'];
 
     // Listen to Products
     useEffect(() => {
@@ -213,7 +223,7 @@ const ProductManagerView = () => {
                     <div className="space-y-4 md:col-span-2">
                         <label className="text-xs font-black uppercase text-slate-400">অ্যাভেইলেবল সাইজ (ড্রপডাউন সিলেক্ট)</label>
                         <div className="flex flex-wrap gap-3">
-                            {commonSizes.map(size => (
+                            {currentSizes.map(size => (
                                 <button type="button" key={size} onClick={() => toggleSize(size)} className={`px-6 py-3 rounded-full font-bold text-sm transition-all border-2 ${newProduct.sizes.includes(size) ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg scale-105' : 'bg-slate-50 text-slate-500 border-transparent hover:border-slate-200'}`}>
                                     {size}
                                 </button>

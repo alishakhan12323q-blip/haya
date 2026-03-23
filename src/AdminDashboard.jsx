@@ -604,10 +604,31 @@ const AdminDashboard = () => {
                         <div className="space-y-3"><label className="text-[11px] font-black uppercase tracking-widest text-slate-600">মোবাইল নম্বর</label><input required className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-blue-500 transition-all font-black text-lg" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} /></div>
                     </div>
                     <div className="space-y-3"><label className="text-[11px] font-black uppercase tracking-widest text-slate-600">ডেলিভারি ঠিকানা</label><textarea required className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-blue-500 h-28 font-bold text-lg resize-none" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} /></div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                        <div className="space-y-3"><label className="text-[11px] font-black uppercase tracking-widest text-slate-600">কালার</label><input className="w-full px-6 py-5 border-2 rounded-2xl font-bold text-lg outline-none focus:border-slate-900" value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })} /></div>
-                        <div className="space-y-3"><label className="text-[11px] font-black uppercase tracking-widest text-slate-600">সাইজ</label><input className="w-full px-6 py-5 border-2 rounded-2xl font-bold text-lg outline-none focus:border-slate-900" value={formData.size} onChange={(e) => setFormData({ ...formData, size: e.target.value })} /></div>
-                        <div className="space-y-3"><label className="text-[11px] font-black uppercase tracking-widest text-slate-600">মূল্য (৳)</label><input type="number" className="w-full px-6 py-5 border-2 border-blue-500/20 rounded-2xl font-black text-2xl text-blue-600 outline-none focus:border-blue-500" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} /></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-widest text-slate-600">কালার</label>
+                            <select className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold text-lg outline-none focus:border-blue-500" value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })}>
+                                {['Black', 'Maroon', 'Olive', 'Navy', 'Grey', 'Brown', 'Purple', 'White', 'Pink', 'Mehndi', 'Coffee', 'Chocolate', 'Sky Blue', 'Teal', 'Lavender', 'Emerald', 'Peach', 'Golden', 'Silver', 'Nude'].map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-widest text-slate-600">সাইজ / ক্যাটাগরি</label>
+                            <select className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold text-lg outline-none focus:border-blue-500" value={formData.size} onChange={(e) => setFormData({ ...formData, size: e.target.value })}>
+                                <optgroup label="Borka Sizes">
+                                    {Array.from({ length: (58 - 20) / 2 + 1 }, (_, i) => (20 + i * 2).toString()).map(s => <option key={s} value={s}>{s}</option>)}
+                                    <option value="Free Size">Free Size</option>
+                                </optgroup>
+                                <optgroup label="Hijab Sizes">
+                                    <option value="40 Inchi (Choto)">40 Inchi (Choto)</option>
+                                    <option value="72 Inchi (Majhari)">72 Inchi (Majhari)</option>
+                                    <option value="80 Inchi (Boro)">80 Inchi (Boro)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div className="md:col-span-2 space-y-3">
+                             <label className="text-[11px] font-black uppercase tracking-widest text-slate-600">মূল্য (৳)</label>
+                             <input type="number" className="w-full px-6 py-5 border-2 border-blue-500/20 rounded-2xl font-black text-2xl text-blue-600 outline-none focus:border-blue-500" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+                        </div>
                     </div>
                     <button type="submit" className="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-black text-2xl hover:scale-[1.02] shadow-[0_20px_40px_rgba(0,0,0,0.2)] active:scale-95 transition-all">কনফার্ম এন্ট্রি করুন</button>
                 </form>
