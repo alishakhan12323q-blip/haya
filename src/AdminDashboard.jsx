@@ -57,6 +57,7 @@ const LINKS = {
         { label: 'বড়বোন কালেকশন', url: 'https://nrzoone.com/borobon', icon: '🌸' },
         { label: 'ফাইজা বোরকা', url: 'https://nrzoone.com/faiza', icon: '💎' },
         { label: 'কিডস কালেকশন', url: 'https://nrzoone.com/kids', icon: '🎀' },
+        { label: 'হিজাব কালেকশন', url: 'https://nrzoone.com/hijab', icon: '🧕' },
     ],
     admin: [
         { label: 'Admin Dashboard', url: 'https://nrzoone.com/admin', icon: '🔐' },
@@ -807,27 +808,6 @@ const AdminDashboard = () => {
                             <div className="flex gap-4">
                                 <button onClick={() => setShowEarnModal(null)} className="flex-1 py-5 rounded-2xl font-black text-slate-500 uppercase tracking-widest">বন্ধ করুন</button>
                                 <button onClick={() => addTransaction(showEarnModal.firebaseId, 'earning', document.getElementById('earnAmount').value, document.getElementById('earnDesc').value)} className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest">সেভ করুন</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {showPayModal && (
-                    <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center p-8 z-[200]">
-                        <div className="bg-white p-12 rounded-[4rem] w-full max-w-md shadow-2xl animate-fade-in border-t-[15px] border-emerald-500">
-                            <h3 className="text-2xl font-black mb-8">পেমেন্ট এন্ট্রি: <span className="text-emerald-600">{showPayModal.name}</span></h3>
-                            <input type="number" placeholder="পেমেন্ট টাকার অংক..." id="payAmount" className="w-full px-6 py-5 bg-emerald-50 border-2 border-emerald-100 rounded-2xl mb-6 font-black text-2xl outline-none focus:bg-white" />
-                            <input placeholder="পেমেন্ট ডিটেইলস (যেমন: বিকাশ/ক্যাশ)..." id="payDesc" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl mb-10 font-bold" />
-                            <div className="flex gap-4">
-                                <button onClick={() => setShowPayModal(null)} className="flex-1 py-5 rounded-2xl font-black text-slate-500 uppercase tracking-widest">বাতিল</button>
-                                <button onClick={() => addTransaction(showPayModal.firebaseId, 'payment', document.getElementById('payAmount').value, document.getElementById('payDesc').value)} className="flex-1 bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-emerald-100">পরিশোধ করুন</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    };e)} className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest">সেভ করুন</button>
                             </div>
                         </div>
                     </div>

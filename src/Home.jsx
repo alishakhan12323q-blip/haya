@@ -62,8 +62,19 @@ const Home = () => {
             image: '/kids_hero.jpg', 
             price: '৬৯০ ৳',
             path: '/kids',
-            span: 'col-span-1 md:col-span-2 row-span-1 h-[500px]',
+            span: 'col-span-1 md:col-span-1 row-span-1 h-[500px]',
             theme: 'dark'
+        },
+        {
+            id: 'hijab',
+            title: 'হিজাব কালেকশন',
+            subtitle: 'EXCLUSIVE HIJAB',
+            description: '৪৬/৭২/৮০ ইঞ্চি সাইজের প্রিমিয়াম হিজাব কালেকশন।',
+            image: '/hero_maroon.jpg', 
+            price: '২৫০ ৳',
+            path: '/hijab',
+            span: 'col-span-1 md:col-span-1 row-span-1 h-[500px]',
+            theme: 'light'
         }
     ];
 
@@ -172,7 +183,7 @@ const Home = () => {
                     <p className="text-white/60 text-lg md:text-xl font-medium tracking-wide">
                         Explore our latest collections carefully crafted for the modern, modest woman. 
                     </p>
-                    <button className="mt-10 px-12 py-5 bg-white text-black text-sm uppercase tracking-[0.2em] font-black hover:bg-slate-200 transition-colors">
+                    <button onClick={() => navigate('/haya')} className="mt-10 px-12 py-5 bg-white text-black text-sm uppercase tracking-[0.2em] font-black hover:bg-slate-200 transition-colors">
                         Shop All Collections
                     </button>
                 </div>

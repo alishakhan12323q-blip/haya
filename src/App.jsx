@@ -9,6 +9,8 @@ import BoroBonCollection from './BoroBonCollection';
 import MaCollection from './MaCollection';
 import MaBoroMeyeCollection from './MaBoroMeyeCollection';
 import AdminDashboard from './AdminDashboard';
+import HijabCollection from './HijabCollection';
+
 
 import { CartProvider } from './CartContext';
 import CartSidebar from './CartSidebar';
@@ -28,6 +30,8 @@ function App() {
                     <Route path="/ma" element={<MaCollection />} />
                     <Route path="/maboromeye" element={<MaBoroMeyeCollection />} />
                     <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/hijab" element={<HijabCollection />} />
+
                 </Routes>
                 <CartSidebar />
                 <CartIcon />

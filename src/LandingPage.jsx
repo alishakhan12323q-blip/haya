@@ -239,7 +239,7 @@ const LandingPage = () => {
                             )}
                             <div className="absolute bottom-6 left-6 right-6 glass-morphism p-4 rounded-2xl flex justify-between items-center">
                                 <div>
-                                    <p className="text-sm font-medium opacity-70 italic">হায়া সিরিজ - প্রিমিয়াম কালেকশন</p>
+                                    <p className="text-sm font-medium opacity-70 italic">NRZOONE - প্রিমিয়াম কালেকশন</p>
                                     <p className="text-2xl font-bold text-premium-gold">১৩৫০ ৳ <span className="text-sm line-through text-gray-400 ml-2">১৯৫০ ৳</span></p>
                                 </div>
                                 <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">
