@@ -79,6 +79,20 @@ const CartSidebar = () => {
                             <span className="text-[#FF4D6D]">{cartTotal} ৳</span>
                         </div>
                         <button 
+                            onClick={() => {
+                                // Scroll to order form
+                                const form = document.querySelector('section[ref]'); 
+                                // Or use a standard ID
+                                const orderForm = document.getElementById('order-form') || document.querySelector('form');
+                                if (orderForm) {
+                                    orderForm.scrollIntoView({ behavior: 'smooth' });
+                                    // Close sidebar
+                                    const drawer = document.getElementById('cart-drawer');
+                                    if (drawer) drawer.style.transform = 'translateX(100%)';
+                                } else {
+                                    window.location.href = '/#form';
+                                }
+                            }}
                             className="w-full bg-[#FF4D6D] text-white py-5 rounded-2xl font-extrabold text-xl shadow-xl hover:bg-[#E63958] transition-all flex items-center justify-center gap-3 shadow-[#FF4D6D]/20 group"
                         >
                             সরাসরি চেকআউট <ArrowRight className="group-hover:translate-x-2 transition-transform" />

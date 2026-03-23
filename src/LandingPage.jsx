@@ -19,7 +19,7 @@ import {
     Plus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GOOGLE_SHEET_URL } from './config';
+import { GOOGLE_SHEET_URL, SMS_API_KEY, SMS_SENDER_ID, SMS_API_URL } from './config';
 import { useCart } from './CartContext';
 
 // Product images are currently using placeholders as requested.
@@ -113,66 +113,45 @@ const LandingPage = () => {
         };
 
         try {
+            window.alert("অর্ডার প্রসেস হচ্ছে, ১ সেকেন্ড অপেক্ষা করুন...");
             setIsSubmitting(true);
 
-            // 1. Submit to Google Sheets (Non-blocking)
-            if (GOOGLE_SHEET_URL) {
-                fetch(GOOGLE_SHEET_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                }).catch(err => console.error("Sheets Sync Error:", err));
-            }
-
-            // 2. Submit to Firebase with a 4-second timeout to prevent UI hang
-            const firestorePromise = addDoc(collection(db, "orders"), orderData);
-            const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 4000, 'timeout'));
-
-            const result = await Promise.race([firestorePromise, timeoutPromise]);
-
-            if (result === 'timeout') {
-                console.warn("Firestore sync is slow, proceeding optimistically.");
-            }
-
-            // Facebook Pixel Tracking
-            if (window.fbq) {
-                try {
-                    window.fbq('track', 'Purchase', {
-                        value: currentTotal,
-                        currency: 'BDT',
-                        content_name: selectedType,
-                        content_category: 'Borka',
-                        num_items: quantity
-                    });
-                } catch (pixelError) {
-                    console.error("Pixel Error:", pixelError);
-                }
-            }
-
+            // OPTIMISTIC UPDATE: Show success modal immediately to prevent UI hang
             setOrderSuccess(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            setIsSubmitting(false);
 
-            // WhatsApp Redirect
-            const whatsappNumber = "8801783155897";
-            const message = `*নতুন অর্ডার (Haya Series)*\n\n` +
-                `*নাম:* ${formData.name}\n` +
-                `*মোবাইল:* ${formData.phone}\n` +
-                `*ঠিকানা:* ${formData.address}\n` +
-                `*প্রোডাক্ট:* ${selectedType === 'with_hijab' ? 'হিজাবসহ পুরো সেট' : 'শুধুমাত্র বোরকা'}\n` +
-                `*কালার:* ${selectedColor}\n` +
-                `*সাইজ:* ${selectedSize}\n` +
-                `*পরিমাণ:* ${quantity}\n` +
-                `*ডেলিভারি এরিয়া:* ${deliveryArea === 'inside' ? 'ঢাকার ভিতরে' : 'ঢাকার বাইরে'}\n` +
-                `*সর্বমোট মূল্য:* ${currentTotal} ৳\n\n` +
-                `_অর্ডারটি দ্রুত কনফার্ম করুন।_`;
+            // BACKGROUND SYNC: These will run while the user sees the success modal
 
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            // 1. Submit to Google Sheets (Exclude Firebase-specific objects)
+            if (GOOGLE_SHEET_URL) {
+                const sheetData = { ...orderData };
+                delete sheetData.createdAt; // Cannot serialize serverTimestamp
+                const params = new URLSearchParams(sheetData).toString();
+                fetch(`${GOOGLE_SHEET_URL}?${params}`, { method: 'GET', mode: 'no-cors' })
+                    .catch(err => console.error("Sheets Sync Error:", err));
+            }
 
-            // Short delay to let the success modal show before redirecting
-            setTimeout(() => {
-                window.open(whatsappUrl, '_blank');
-            }, 1000);
+            // 2. Submit to Firebase
+            addDoc(collection(db, "orders"), orderData).catch(err => console.error("Firebase Error:", err));
+
+            // 3. Facebook Pixel Tracking
+            if (window.fbq) {
+                try {
+                    window.fbq('track', 'Purchase', { currency: 'BDT', value: orderData.total });
+                } catch (e) { console.error(e); }
+            }
+
+            // 4. Automated SMS Notification
+            if (SMS_API_KEY && SMS_API_KEY !== 'VoYeTuiZ7OH6ZW1rLFZf' && SMS_API_KEY !== 'PASTE_YOUR_API_KEY_HERE') {
+                const formattedNumber = formData.phone.trim().startsWith('88') ? formData.phone.trim() : `88${formData.phone.trim()}`;
+                const smsMessage = `প্রিয় ${formData.name}, NRZONE এ আপনার হায়া সিরিজ বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
+                fetch(`${SMS_API_URL}?api_key=${encodeURIComponent(SMS_API_KEY)}&type=text&number=${encodeURIComponent(formattedNumber)}&senderid=${encodeURIComponent(SMS_SENDER_ID || '')}&message=${encodeURIComponent(smsMessage)}`, { mode: 'no-cors' })
+                    .catch(err => console.error("SMS Error:", err));
+            }
+
+            return; // Success flow handled above
+
         } catch (error) {
             console.error("Order Submission Error:", error);
             alert('দুঃখিত, অর্ডারটি সম্পন্ন করতে সমস্যা হচ্ছে। তবে আমরা আপনার তথ্য পাওয়ার চেষ্টা করছি। অনুগ্রহ করে আমাদের ফোন নম্বরে যোগাযোগ করুন।');
@@ -667,44 +646,35 @@ const LandingPage = () => {
             </a>
 
             {/* Success Modal */}
-            <AnimatePresence>
-                {orderSuccess && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            className="bg-white rounded-[2.5rem] p-8 md:p-12 max-w-lg w-full text-center shadow-2xl overflow-hidden relative"
-                        >
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-blue-500"></div>
-
-                            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
-                                <CheckCircle2 size={48} className="text-green-600" />
-                            </div>
-
-                            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">অর্ডার সফল হয়েছে!</h2>
-                            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                                অভিনন্দন! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। <br />
-                                <span className="text-premium-dark font-bold">NRZONE</span> থেকে শীঘ্রই আপনাকে কল করে নিশ্চিত করা হবে।
-                            </p>
-
-                            <div className="space-y-4">
-                                <button
-                                    onClick={() => setOrderSuccess(false)}
-                                    className="w-full bg-premium-dark text-white py-4 rounded-2xl font-bold text-xl hover:bg-premium-gold transition-all shadow-lg active:scale-95"
-                                >
-                                    ঠিক আছে
-                                </button>
-                                <p className="text-sm text-gray-400 font-medium">আমাদের সাথে থাকার জন্য ধন্যবাদ</p>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {orderSuccess && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+                    <div className="bg-white rounded-[2.5rem] p-8 md:p-12 max-w-lg w-full text-center shadow-2xl relative border-4 border-green-500">
+                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 size={40} className="text-green-600" />
+                        </div>
+                        <h2 className="text-3xl font-black text-gray-900 mb-2">অর্ডার সফল হয়েছে!</h2>
+                        <p className="text-lg text-gray-600 mb-6">
+                            আমরা আপনার অর্ডারটি পেয়েছি। শীঘ্রই কল করা হবে।
+                        </p>
+                        <div className="space-y-4">
+                            <a 
+                                href={`https://wa.me/8801783155897?text=${encodeURIComponent(`*অর্ডার কনফার্ম (Haya)*\n\n*নাম:* ${formData.name}\n*মোবাইল:* ${formData.phone}\n*আইটেম:* ${selectedType}\n*সর্বমোট:* ${currentTotal} ৳`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2"
+                            >
+                                WhatsApp এ নিশ্চিত করুন
+                            </a>
+                            <button
+                                onClick={() => setOrderSuccess(false)}
+                                className="w-full bg-gray-100 text-black py-4 rounded-xl font-bold"
+                            >
+                                ঠিক আছে
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Footer */}
             <footer className="bg-white pt-20 pb-10 border-t border-gray-100 px-6">

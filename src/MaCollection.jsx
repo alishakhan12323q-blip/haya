@@ -18,7 +18,7 @@ import {
     Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GOOGLE_SHEET_URL } from './config';
+import { GOOGLE_SHEET_URL, SMS_API_KEY, SMS_SENDER_ID, SMS_API_URL } from './config';
 import { useCart } from './CartContext';
 
 const MaCollection = () => {
@@ -99,19 +99,33 @@ const MaCollection = () => {
         try {
             setIsSubmitting(true);
 
-            if (GOOGLE_SHEET_URL) {
-                fetch(GOOGLE_SHEET_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                }).catch(err => console.error("Sheets Sync Error:", err));
-            }
-
-            await addDoc(collection(db, "orders"), orderData);
-
+            // OPTIMISTIC UPDATE: Show success modal immediately to prevent UI hang
             setOrderSuccess(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            setIsSubmitting(false);
+
+            // BACKGROUND SYNC
+            // 1. Submit to Google Sheets (Exclude Firebase-specific objects)
+            if (GOOGLE_SHEET_URL) {
+                const sheetData = { ...orderData };
+                delete sheetData.createdAt;
+                const params = new URLSearchParams(sheetData).toString();
+                fetch(`${GOOGLE_SHEET_URL}?${params}`, { method: 'GET', mode: 'no-cors' })
+                    .catch(err => console.error("Sheets Sync Error:", err));
+            }
+
+            // 2. Submit to Firebase
+            addDoc(collection(db, "orders"), orderData).catch(err => console.error("Firebase Error:", err));
+
+            // 4. Automated SMS Notification
+            if (SMS_API_KEY && SMS_API_KEY !== 'VoYeTuiZ7OH6ZW1rLFZf' && SMS_API_KEY !== 'PASTE_YOUR_API_KEY_HERE') {
+                const formattedNumber = formData.phone.trim().startsWith('88') ? formData.phone.trim() : `88${formData.phone.trim()}`;
+                const smsMessage = `প্রিয় ${formData.name}, NRZONE এ আপনার মা কালেকশন বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা আপনাকে কল করবো। ধন্যবাদ!`;
+                fetch(`${SMS_API_URL}?api_key=${encodeURIComponent(SMS_API_KEY)}&type=text&number=${encodeURIComponent(formattedNumber)}&senderid=${encodeURIComponent(SMS_SENDER_ID || '')}&message=${encodeURIComponent(smsMessage)}`, { mode: 'no-cors' })
+                    .catch(err => console.error("SMS Error:", err));
+            }
+
+            return; // Success flow handled above
         } catch (error) {
             console.error("Order Submission Error:", error);
             alert('দুঃখিত, অর্ডারটি সম্পন্ন করতে সমস্যা হচ্ছে। অনুগ্রহ করে ফোন করে অর্ডার দিন।');
@@ -408,12 +422,22 @@ const MaCollection = () => {
                             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                                 শীঘ্রই আপনাকে কল করে নিশ্চিত করা হবে।
                             </p>
-                            <button
-                                onClick={() => setOrderSuccess(false)}
-                                className="w-full bg-black text-white py-4 rounded-2xl font-bold text-xl"
-                            >
-                                ঠিক আছে
-                            </button>
+                             <div className="space-y-4">
+                                <a 
+                                    href={`https://wa.me/8801783155897?text=${encodeURIComponent(`*নতুন অর্ডার (Ma)*\n\n*নাম:* ${formData.name}\n*মোবাইল:* ${formData.phone}\n*প্যাকেজ:* ${withHijab ? 'বোরকা + হিজাব' : 'শুধুমাত্র বোরকা'}\n*সর্বমোট:* ${currentTotal} ৳\n\n_অর্ডারটি কনফার্ম করতে এই মেসেজটি পাঠান।_`)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full bg-[#25D366] text-white py-4 rounded-2xl font-bold text-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all shadow-lg"
+                                >
+                                    WhatsApp এ কনফার্ম করুন
+                                </a>
+                                <button
+                                    onClick={() => setOrderSuccess(false)}
+                                    className="w-full bg-neutral-100 text-black py-4 rounded-2xl font-bold text-xl"
+                                >
+                                    ঠিক আছে
+                                </button>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}

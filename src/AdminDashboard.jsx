@@ -706,6 +706,110 @@ const AdminDashboard = () => {
     }
 
     // ─── LOGIN VIEW ────────────────────────────────
+    const FactoryExpenseView = () => {
+        const [showAddForm, setShowAddForm] = useState(false);
+        const [newExpense, setNewExpense] = useState({ category: 'মালামাল', amount: '', description: '', date: new Date().toISOString().split('T')[0] });
+
+        const addExpense = async (e) => {
+            e.preventDefault();
+            if (!newExpense.amount || !newExpense.category) return;
+            try {
+                await addDoc(collection(db, "factory_expenses"), { 
+                    ...newExpense, 
+                    amount: parseInt(newExpense.amount),
+                    createdAt: serverTimestamp() 
+                });
+                setNewExpense({ category: 'মালামাল', amount: '', description: '', date: new Date().toISOString().split('T')[0] });
+                setShowAddForm(false);
+                alert('খরচ সফলভাবে যোগ করা হয়েছে!');
+            } catch (error) { console.error(error); alert('ত্রুটি হয়েছে!'); }
+        };
+
+        const totalExpenses = expenses.reduce((acc, curr) => acc + (parseInt(curr.amount) || 0), 0);
+
+        return (
+            <div className="space-y-12 no-print animate-fade-in text-slate-800">
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                    <div>
+                        <h2 className="text-4xl font-extrabold tracking-tight underline decoration-slate-100 underline-offset-[12px]">ফ্যাক্টরি ওভারহেড / খরচ</h2>
+                        <p className="mt-4 text-slate-600 font-bold flex items-center gap-2">মোট খরচ: <span className="text-rose-600 text-2xl font-black">৳ {totalExpenses.toLocaleString()}</span></p>
+                    </div>
+                    <button onClick={() => setShowAddForm(!showAddForm)} className="bg-slate-900 text-white px-10 py-5 rounded-[1.8rem] font-black flex items-center gap-4 shadow-2xl active:scale-95 transition-all">
+                        <PlusCircle size={24} /> নতুন খরচ যোগ করুন
+                    </button>
+                </div>
+
+                {showAddForm && (
+                    <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl shadow-slate-200/50 border border-slate-50 animate-slide-up">
+                        <form onSubmit={addExpense} className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">ক্যাটাগরি</label>
+                                <select className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-blue-500 transition-all font-bold text-lg" value={newExpense.category} onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}>
+                                    <option value="মালামাল">মালামাল (Raw Material)</option>
+                                    <option value="শ্রমিক মজুরি">শ্রমিক মজুরি (Labor)</option>
+                                    <option value="কুরিয়ার খরচ">কুরিয়ার খরচ (Courier)</option>
+                                    <option value="প্যাকিং সরঞ্জাম">প্যাকিং সরঞ্জাম (Packing)</option>
+                                    <option value="অন্যান্য">অন্যান্য (Others)</option>
+                                </select>
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">টাকার অংক</label>
+                                <input type="number" required className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-rose-500 transition-all font-black text-2xl text-rose-600" value={newExpense.amount} onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })} />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">তারিখ</label>
+                                <input type="date" required className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-blue-500 transition-all font-bold text-lg" value={newExpense.date} onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })} />
+                            </div>
+                            <div className="md:col-span-2 space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">বিস্তারিত বিবরণ</label>
+                                <input className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-blue-500 transition-all font-bold text-lg text-slate-700" value={newExpense.description} onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })} placeholder="যেমন: ১০ গজ কালো কাপড় বা বিকাশে মজুরি প্রদান..." />
+                            </div>
+                            <div className="flex items-end">
+                                <button type="submit" className="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-black text-lg uppercase tracking-widest shadow-xl active:scale-95 transition-all">খরচ সেভ করুন</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                <div className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-50 overflow-hidden">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-base text-left border-collapse">
+                            <thead className="bg-[#FBFCFE] text-slate-600 font-extrabold uppercase text-[11px] tracking-[0.25em] border-b border-slate-50">
+                                <tr>
+                                    <th className="p-8">DATE</th>
+                                    <th className="p-8">CATEGORY</th>
+                                    <th className="p-8">DESCRIPTION</th>
+                                    <th className="p-8 text-right">AMOUNT</th>
+                                    <th className="p-8 text-center">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50">
+                                {expenses.map((exp) => (
+                                    <tr key={exp.firebaseId} className="hover:bg-slate-50/50 transition-all group">
+                                        <td className="p-8 font-bold text-slate-500">{exp.date}</td>
+                                        <td className="p-8">
+                                            <span className="bg-slate-100 text-slate-900 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm border border-slate-200">{exp.category}</span>
+                                        </td>
+                                        <td className="p-8 font-bold text-slate-600 italic text-sm">{exp.description || 'N/A'}</td>
+                                        <td className="p-8 text-right font-black text-2xl text-rose-600 tracking-tighter">৳{exp.amount}</td>
+                                        <td className="p-8 text-center">
+                                            <button onClick={() => deleteExpense(exp.firebaseId)} className="p-4 bg-rose-50 text-rose-200 hover:text-rose-600 hover:bg-rose-100 rounded-2xl transition-all">
+                                                <XCircle size={22} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {expenses.length === 0 && (
+                                    <tr><td colSpan="5" className="p-32 text-center text-slate-500 font-black uppercase tracking-[0.5em] text-xl">No Expenses Found</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const LoginView = () => (
         <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center p-8">
             <div className="w-full max-w-[480px] bg-white rounded-[4rem] shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden animate-fade-in">
