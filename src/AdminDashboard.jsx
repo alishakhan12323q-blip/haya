@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { db } from './firebase';
+import { db, storage } from './firebase';
 import { collection, query, orderBy, onSnapshot, updateDoc, doc, deleteDoc, addDoc, serverTimestamp, where } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import ProductManagerView from './ProductManagerView';
 import {
     LayoutDashboard,
@@ -40,7 +41,9 @@ import {
     User,
     CreditCard,
     QrCode,
-    History
+    History,
+    UploadCloud,
+    Image as ImageIcon
 } from 'lucide-react';
 import { GOOGLE_SHEET_URL, GOOGLE_SHEET_VIEW_URL } from './config';
 
@@ -614,14 +617,49 @@ const AdminDashboard = () => {
 
     const WorkerLedgerView = () => {
         const [showAddWorker, setShowAddWorker] = useState(false);
-        const [showPayModal, setShowPayModal] = useState(null); // stores worker firebaseId
+        const [showPayModal, setShowPayModal] = useState(null);
         const [showEarnModal, setShowEarnModal] = useState(null);
-        const [newWorkerName, setNewWorkerName] = useState('');
+        const [showDocModal, setShowDocModal] = useState(null);
+        
+        const [newWorker, setNewWorker] = useState({ 
+            name: '', 
+            phone: '', 
+            nid: '', 
+            passport: '', 
+            docImage: '' 
+        });
+        const [isUploading, setIsUploading] = useState(false);
 
-        const addWorker = async (name) => {
-            if (!name) return;
-            await addDoc(collection(db, "worker_accounts"), { name, totalEarned: 0, totalPaid: 0, currentBalance: 0, createdAt: serverTimestamp() });
-            setNewWorkerName(''); setShowAddWorker(false);
+        const handleDocUpload = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            setIsUploading(true);
+            const storageRef = ref(storage, `workers/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on("state_changed", 
+                null, 
+                (err) => { alert("আপলোড ব্যর্থ হয়েছে"); setIsUploading(false); },
+                async () => {
+                    const url = await getDownloadURL(uploadTask.snapshot.ref);
+                    setNewWorker({ ...newWorker, docImage: url });
+                    setIsUploading(false);
+                }
+            );
+        };
+
+        const addWorker = async (e) => {
+            e.preventDefault();
+            if (!newWorker.name) return;
+            await addDoc(collection(db, "worker_accounts"), { 
+                ...newWorker, 
+                totalEarned: 0, 
+                totalPaid: 0, 
+                currentBalance: 0, 
+                createdAt: serverTimestamp() 
+            });
+            setNewWorker({ name: '', phone: '', nid: '', passport: '', docImage: '' }); 
+            setShowAddWorker(false);
+            alert('ওয়ার্কার সফলভাবে যুক্ত হয়েছে!');
         };
 
         const addTransaction = async (workerId, type, amount, desc) => {
@@ -638,32 +676,81 @@ const AdminDashboard = () => {
         };
 
         return (
-            <div className="space-y-12 no-print animate-fade-in text-slate-800">
+            <div className="space-y-12 no-print animate-fade-in text-slate-800 pb-20">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-4xl font-extrabold tracking-tight underline decoration-slate-100 underline-offset-[12px]">ওয়ার্কার লেজার</h2>
+                    <h2 className="text-4xl font-extrabold tracking-tight underline decoration-slate-100 underline-offset-[12px]">ওয়ার্কার লেজার ও ডকুমেন্টেশন</h2>
                     <button onClick={() => setShowAddWorker(!showAddWorker)} className="bg-slate-900 text-white px-10 py-5 rounded-[1.8rem] font-black flex items-center gap-4 shadow-2xl active:scale-95 transition-all">
                         <Users size={24} /> নতুন ওয়ার্কার যোগ করুন
                     </button>
                 </div>
 
                 {showAddWorker && (
-                    <div className="bg-white p-10 rounded-[3rem] shadow-xl border-4 border-dashed border-slate-100 animate-slide-up">
-                        <input placeholder="ওয়ার্কারের প্ক্ষ নাম..." className="w-full px-8 py-6 border-2 rounded-2xl font-black text-2xl outline-none focus:border-slate-900 mb-6" value={newWorkerName} onChange={(e) => setNewWorkerName(e.target.value)} />
-                        <button onClick={() => addWorker(newWorkerName)} className="w-full bg-blue-600 text-white py-6 rounded-3xl font-black text-2xl uppercase tracking-widest shadow-xl shadow-blue-100">Add to List</button>
+                    <div className="bg-white p-12 rounded-[4rem] shadow-2xl border-2 border-slate-50 animate-slide-up">
+                        <h3 className="text-xl font-black uppercase text-blue-600 mb-8 border-b-2 pb-4 inline-block">নতুন ওয়ার্কার ইনফরমেশন</h3>
+                        <form onSubmit={addWorker} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">পুরো নাম</label>
+                                <input required placeholder="যেমন: মো: আরিফুল ইসলাম" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold" value={newWorker.name} onChange={(e) => setNewWorker({ ...newWorker, name: e.target.value })} />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">ফোন নম্বর</label>
+                                <input required placeholder="017xxxxxxxx" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold" value={newWorker.phone} onChange={(e) => setNewWorker({ ...newWorker, phone: e.target.value })} />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">NID নম্বর</label>
+                                <input placeholder="জাতীয় পরিচয়পত্র নম্বর..." className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold" value={newWorker.nid} onChange={(e) => setNewWorker({ ...newWorker, nid: e.target.value })} />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">পাসপোর্ট নম্বর (ঐচ্ছিক)</label>
+                                <input placeholder="পাসপোর্ট নম্বর..." className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl font-bold" value={newWorker.passport} onChange={(e) => setNewWorker({ ...newWorker, passport: e.target.value })} />
+                            </div>
+                            <div className="md:col-span-2 space-y-3">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-slate-500">NID/পাসপোর্ট ছবি আপলোড</label>
+                                <div className="relative border-4 border-dashed border-slate-100 rounded-[2rem] p-10 flex flex-col items-center justify-center bg-slate-50 overflow-hidden group">
+                                    {newWorker.docImage ? (
+                                        <div className="flex flex-col items-center">
+                                            <img src={newWorker.docImage} alt="ID card" className="h-32 rounded-xl shadow-lg mb-4" />
+                                            <p className="text-emerald-600 font-black text-xs uppercase">ডকুমেন্ট আপলোড হয়েছে!</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <UploadCloud className="text-slate-300 mb-4 group-hover:text-blue-500 transition-colors" size={40} />
+                                            <p className="text-slate-500 font-bold">এখানে ক্লিক করে ছবি সিলেক্ট করুন</p>
+                                        </>
+                                    )}
+                                    {isUploading && <div className="absolute inset-0 bg-white/80 flex items-center justify-center font-black text-blue-600 animate-pulse">আপলোড হচ্ছে...</div>}
+                                    <input type="file" accept="image/*" onChange={handleDocUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                </div>
+                            </div>
+                            <div className="md:col-span-2">
+                                <button type="submit" disabled={isUploading} className="w-full bg-slate-900 text-white py-6 rounded-[2.2rem] font-black text-2xl uppercase tracking-widest shadow-xl shadow-slate-200">সেভ করুন</button>
+                            </div>
+                        </form>
                     </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {workerAccounts.map(worker => (
-                        <div key={worker.firebaseId} className="bg-white p-10 rounded-[3.5rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all group overflow-hidden relative">
-                            <div className="absolute top-0 right-0 p-8 text-slate-50 group-hover:text-blue-50 transition-colors"><Shield size={100} /></div>
-                            <div className="relative z-10">
-                                <h3 className="text-4xl font-black tracking-tight mb-8 text-slate-900 italic underline decoration-blue-500 underline-offset-8">{worker.name}</h3>
+                        <div key={worker.firebaseId} className="bg-white p-10 rounded-[3.5rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all group overflow-hidden relative flex flex-col">
+                            <div className="absolute top-0 right-0 p-8 text-slate-50 group-hover:text-blue-50 transition-colors pointer-events-none"><Shield size={100} /></div>
+                            <div className="relative z-10 flex-1">
+                                <h3 className="text-4xl font-black tracking-tight mb-2 text-slate-900 italic">{worker.name}</h3>
+                                <p className="text-xs font-black text-blue-600 uppercase tracking-widest mb-8 flex items-center gap-2"><Phone size={12}/> {worker.phone || 'N/A'}</p>
+                                
                                 <div className="space-y-6">
-                                    <div className="flex justify-between"><span className="text-slate-600 font-black uppercase text-xs">অর্জিত কমিশন</span> <span className="text-slate-800 font-extrabold text-lg">৳{worker.totalEarned}</span></div>
-                                    <div className="flex justify-between"><span className="text-slate-600 font-black uppercase text-xs">পরিশোধ করা হয়েছে</span> <span className="text-emerald-600 font-extrabold text-lg">৳{worker.totalPaid}</span></div>
-                                    <div className="flex justify-between pt-6 border-t-2 border-slate-50"><span className="text-rose-600 font-black uppercase text-xs">বর্তমান বকেয়া</span> <span className="text-rose-600 font-black text-3xl tracking-tighter">৳{worker.currentBalance}</span></div>
+                                    <div className="flex justify-between border-b pb-2 border-slate-50"><span className="text-slate-400 font-black uppercase text-[10px]">অর্জিত কমিশন</span> <span className="text-slate-800 font-extrabold text-lg">৳{worker.totalEarned}</span></div>
+                                    <div className="flex justify-between border-b pb-2 border-slate-50"><span className="text-slate-400 font-black uppercase text-[10px]">পরিশোধ করা হয়েছে</span> <span className="text-emerald-600 font-extrabold text-lg">৳{worker.totalPaid}</span></div>
+                                    <div className="flex justify-between pt-6"><span className="text-rose-600 font-black uppercase text-[10px]">বর্তমান বকেয়া</span> <span className="text-rose-600 font-black text-3xl tracking-tighter">৳{worker.currentBalance}</span></div>
                                 </div>
+
+                                <div className="mt-8 p-6 bg-slate-50 rounded-[2rem] space-y-3">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">ডকুমেন্টস:</span>
+                                        {worker.docImage && <button onClick={() => setShowDocModal(worker)} className="flex items-center gap-1.5 text-[10px] font-black text-blue-600 uppercase hover:underline"><ImageIcon size={14}/> ভিউ কার্ড</button>}
+                                    </div>
+                                    <div className="text-[10px] font-bold text-slate-600">NID: {worker.nid || '---'}</div>
+                                </div>
+
                                 <div className="grid grid-cols-2 gap-4 mt-10">
                                     <button onClick={() => setShowEarnModal(worker)} className="bg-slate-100 text-slate-900 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-200 transition-all">কমিশন যোগ</button>
                                     <button onClick={() => setShowPayModal(worker)} className="bg-emerald-600 text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-emerald-100 hover:scale-105 transition-all">পরিশোধ</button>
@@ -673,7 +760,23 @@ const AdminDashboard = () => {
                     ))}
                 </div>
 
-                {/* Pay & Earn Modals (Simplified as prompts for now or sub-forms) */}
+                {/* MODALS */}
+                {showDocModal && (
+                    <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-8 z-[300]">
+                        <div className="bg-white p-14 rounded-[4rem] w-full max-w-2xl shadow-2xl relative overflow-hidden animate-fade-in">
+                            <button onClick={() => setShowDocModal(null)} className="absolute top-10 right-10 p-4 bg-slate-100 rounded-full hover:bg-rose-50 hover:text-rose-600 transition-all z-10"><X size={24}/></button>
+                            <h3 className="text-2xl font-black uppercase tracking-widest mb-4 border-b pb-4">{showDocModal.name} - Identity Card</h3>
+                            <div className="space-y-4 mb-10">
+                               <p className="font-bold text-slate-600">NID: <span className="text-slate-900 font-black text-xl">{showDocModal.nid || 'N/A'}</span></p>
+                               {showDocModal.passport && <p className="font-bold text-slate-600">Passport: <span className="text-slate-900 font-black text-xl">{showDocModal.passport}</span></p>}
+                            </div>
+                            <div className="rounded-[3rem] overflow-hidden border-8 border-slate-50 shadow-2xl">
+                                <img src={showDocModal.docImage} alt="ID Document" className="w-full h-auto object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {showEarnModal && (
                     <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center p-8 z-[200]">
                         <div className="bg-white p-12 rounded-[4rem] w-full max-w-md shadow-2xl animate-fade-in">
@@ -683,6 +786,27 @@ const AdminDashboard = () => {
                             <div className="flex gap-4">
                                 <button onClick={() => setShowEarnModal(null)} className="flex-1 py-5 rounded-2xl font-black text-slate-500 uppercase tracking-widest">বন্ধ করুন</button>
                                 <button onClick={() => addTransaction(showEarnModal.firebaseId, 'earning', document.getElementById('earnAmount').value, document.getElementById('earnDesc').value)} className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest">সেভ করুন</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showPayModal && (
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center p-8 z-[200]">
+                        <div className="bg-white p-12 rounded-[4rem] w-full max-w-md shadow-2xl animate-fade-in border-t-[15px] border-emerald-500">
+                            <h3 className="text-2xl font-black mb-8">পেমেন্ট এন্ট্রি: <span className="text-emerald-600">{showPayModal.name}</span></h3>
+                            <input type="number" placeholder="পেমেন্ট টাকার অংক..." id="payAmount" className="w-full px-6 py-5 bg-emerald-50 border-2 border-emerald-100 rounded-2xl mb-6 font-black text-2xl outline-none focus:bg-white" />
+                            <input placeholder="পেমেন্ট ডিটেইলস (যেমন: বিকাশ/ক্যাশ)..." id="payDesc" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl mb-10 font-bold" />
+                            <div className="flex gap-4">
+                                <button onClick={() => setShowPayModal(null)} className="flex-1 py-5 rounded-2xl font-black text-slate-500 uppercase tracking-widest">বাতিল</button>
+                                <button onClick={() => addTransaction(showPayModal.firebaseId, 'payment', document.getElementById('payAmount').value, document.getElementById('payDesc').value)} className="flex-1 bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-emerald-100">পরিশোধ করুন</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };e)} className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest">সেভ করুন</button>
                             </div>
                         </div>
                     </div>
