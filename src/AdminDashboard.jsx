@@ -508,7 +508,7 @@ const AdminDashboard = () => {
                             <div className="space-y-4 font-black">
                                 <div className="flex justify-between border-b border-gray-100 pb-2">
                                     <span className="text-slate-600 uppercase text-xs">Collection Site</span>
-                                    <span className="text-sm underline decoration-slate-200">{order.landingPage || 'NRZONE MAIN'}</span>
+                                    <span className="text-sm underline decoration-slate-200">{order.landingPage || 'NRZOONE MAIN'}</span>
                                 </div>
                                 <div className="flex justify-between border-b border-gray-100 pb-2">
                                     <span className="text-slate-600 uppercase text-xs">Payment Method</span>
@@ -870,15 +870,15 @@ const AdminDashboard = () => {
     return (
         <div className="min-h-screen bg-[#F8F9FB] font-bengali text-slate-900 flex flex-col md:flex-row">
             {/* Sidebar */}
-            <div className={`fixed no-print md:sticky top-0 left-0 h-screen w-80 bg-[#0C0C0C] text-white z-50 transform transition-transform duration-700 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-[40px_0_80px_rgba(0,0,0,0.2)]`}>
-                <div className="p-12 border-b border-white/5 flex flex-col items-center">
-                    <h1 className="text-4xl font-black tracking-tighter italic text-white underline decoration-blue-600 decoration-4 underline-offset-8">NRZONE</h1>
+            <div className={`fixed no-print md:sticky top-0 left-0 h-screen w-80 bg-[#0C0C0C] text-white z-50 transform transition-transform duration-700 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-[40px_0_80px_rgba(0,0,0,0.2)] flex flex-col`}>
+                <div className="p-10 border-b border-white/5 flex flex-col items-center shrink-0">
+                    <h1 className="text-4xl font-black tracking-tighter italic text-white underline decoration-blue-600 decoration-4 underline-offset-8">NRZOONE</h1>
                     <div className="mt-8 flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></span>
                         <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Live Engine Active</p>
                     </div>
                 </div>
-                <nav className="p-8 space-y-2">
+                <nav className="p-6 space-y-2 flex-1 overflow-y-auto custom-scrollbar">
                     {[
                         { id: 'dashboard', label: 'সেন্ট্রাল ম্যাপ', icon: <LayoutDashboard size={24} />, roles: ['Admin'] },
                         { id: 'products', label: 'প্রোডাক্ট আপলোড', icon: <Package size={24} />, roles: ['Admin', 'Manager'] },
@@ -895,7 +895,7 @@ const AdminDashboard = () => {
                             {activeTab === item.id && <span className="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full"></span>}
                         </button>
                     ))}
-                    <button onClick={handleLogout} className="w-full flex items-center gap-5 p-5 rounded-[1.8rem] font-black text-rose-900 hover:bg-rose-900/10 mt-20 transition-all text-[11px] uppercase tracking-[0.2em]">
+                    <button onClick={handleLogout} className="w-full flex items-center gap-5 p-5 rounded-[1.8rem] font-black text-rose-900 hover:bg-rose-900/10 mt-10 transition-all text-[11px] uppercase tracking-[0.2em] shrink-0">
                         <LogOut size={24} /> এক্সিট সিস্টেম
                     </button>
                 </nav>
@@ -904,7 +904,7 @@ const AdminDashboard = () => {
             {/* Content Area */}
             <div className="flex-1 min-h-screen p-8 md:p-16 lg:p-20 overflow-y-auto noscroll">
                 <div className="md:hidden no-print flex justify-between items-center mb-12">
-                    <h1 className="text-3xl font-black italic underline decoration-blue-600 underline-offset-4">NRZONE</h1>
+                    <h1 className="text-3xl font-black italic underline decoration-blue-600 underline-offset-4">NRZOONE</h1>
                     <button onClick={() => setIsMobileMenuOpen(true)} className="p-4 bg-white rounded-3xl shadow-xl border-2 border-slate-50"><Menu size={28} /></button>
                 </div>
 

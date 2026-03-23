@@ -90,7 +90,7 @@ const Home = () => {
                         }}
                     />
                     <h1 id="fallback-logo" className="hidden text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-black">
-                        NRZONE
+                        NRZOONE
                     </h1>
                     <div className="flex items-center gap-6 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500">
                         <span>Modest</span>
@@ -180,7 +180,7 @@ const Home = () => {
 
             {/* Minimal Footer */}
             <footer className="bg-white text-black py-12 px-12 flex flex-col md:flex-row justify-between items-center text-xs font-black uppercase tracking-[0.2em]">
-                <p>© 2026 NRZONE</p>
+                <p>© 2026 NRZOONE</p>
                 <div className="flex gap-8 mt-6 md:mt-0">
                     <a href="#" className="hover:text-slate-500 transition-colors">Facebook</a>
                     <a href="#" className="hover:text-slate-500 transition-colors">Instagram</a>

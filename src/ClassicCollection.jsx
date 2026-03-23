@@ -145,7 +145,7 @@ const LandingPage = () => {
             // 4. Automated SMS Notification
             if (SMS_API_KEY && SMS_API_KEY !== 'VoYeTuiZ7OH6ZW1rLFZf' && SMS_API_KEY !== 'PASTE_YOUR_API_KEY_HERE') {
                 const formattedNumber = formData.phone.trim().startsWith('88') ? formData.phone.trim() : `88${formData.phone.trim()}`;
-                const smsMessage = `প্রিয় ${formData.name}, NRZONE এ আপনার ক্লাসিক কালেকশন বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা কল করবো। ধন্যবাদ!`;
+                const smsMessage = `প্রিয় ${formData.name}, NRZOONE এ আপনার ক্লাসিক কালেকশন বোরকা অর্ডারটি গ্রহণ করা হয়েছে। শীঘ্রই আমরা কল করবো। ধন্যবাদ!`;
                 fetch(`${SMS_API_URL}?api_key=${encodeURIComponent(SMS_API_KEY)}&type=text&number=${encodeURIComponent(formattedNumber)}&senderid=${encodeURIComponent(SMS_SENDER_ID || '')}&message=${encodeURIComponent(smsMessage)}`, { mode: 'no-cors' })
                     .catch(err => console.error("SMS Error:", err));
             }
@@ -718,7 +718,7 @@ const LandingPage = () => {
                         <div className="text-center md:text-left space-y-4">
                             <div className="text-3xl font-bold tracking-tighter text-black flex items-center justify-center md:justify-start gap-2">
                                 <ShoppingBag className="text-black" />
-                                <span>NRZONE</span>
+                                <span>NRZOONE</span>
                             </div>
                             <p className="text-gray-500 max-w-sm">প্রিমিয়াম কোয়ালিটি বোরকা এবং হিজাব কালেকশন। আমরা বিশ্বাস করি মডেস্টি মানেই আভিজাত্য।</p>
                         </div>
@@ -737,7 +737,7 @@ const LandingPage = () => {
 
                     <div className="pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500 font-medium">
                         <p>© 2026 NR Zone | All Rights Reserved</p>
-                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZONE</span></p>
+                        <p>Design & Developed by <span className="text-premium-dark font-bold">NRZOONE</span></p>
                         <div className="flex gap-6">
                             <a href="#" className="hover:text-premium-dark transition-colors">প্রাইভেসি পলিসি</a>
                             <a href="#" className="hover:text-premium-dark transition-colors">টার্মস ও কন্ডিশন</a>
