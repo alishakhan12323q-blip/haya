@@ -8,20 +8,9 @@ const ProductManagerView = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
-
-    const [newProduct, setNewProduct] = useState({
-        name: '',
-        category: 'haya', // default
-        price: '',
-        discountPrice: '',
-        colors: '',
-        sizes: '',
-        imageUrl: '',
-        stock: 'available',
-        description: ''
-    });
-
-    const categories = [
+    
+    // Dynamic Categories
+    const [categories, setCategories] = useState([
         { id: 'haya', name: 'হায়া সিরিজ' },
         { id: 'classic', name: 'ক্লাসিক কম্বো' },
         { id: 'ma', name: 'মা কালেকশন' },
@@ -29,7 +18,23 @@ const ProductManagerView = () => {
         { id: 'borobon', name: 'বড়বোন কালেকশন' },
         { id: 'faiza', name: 'ফাইজা বোরকা' },
         { id: 'kids', name: 'কিডস কালেকশন' },
-    ];
+    ]);
+    const [newCatName, setNewCatName] = useState('');
+
+    const [newProduct, setNewProduct] = useState({
+        name: '',
+        category: 'haya',
+        price: '',
+        discountPrice: '',
+        colors: [], // Now an array
+        sizes: [],  // Now an array
+        imageUrl: '',
+        stock: 'available',
+        description: ''
+    });
+
+    const commonColors = ['Black', 'Maroon', 'Olive', 'Navy', 'Blue', 'Green', 'Grey', 'Brown', 'Purple', 'White'];
+    const commonSizes = ['50', '52', '54', '56', '58', '60', 'Free Size'];
 
     // Listen to Products
     useEffect(() => {
@@ -39,6 +44,35 @@ const ProductManagerView = () => {
         });
         return () => unsubscribe();
     }, []);
+
+    // Listen to Custom Categories (Optional enhancement: load from Firestore)
+    // For now, let's just keep them in local state or let user add to the list
+    const handleAddCategory = () => {
+        if (!newCatName) return;
+        const id = newCatName.toLowerCase().replace(/\s+/g, '_');
+        setCategories([...categories, { id, name: newCatName }]);
+        setNewProduct({ ...newProduct, category: id });
+        setNewCatName('');
+        alert('নতুন ক্যাটাগরি যুক্ত হয়েছে!');
+    };
+
+    const toggleColor = (color) => {
+        const current = [...newProduct.colors];
+        if (current.includes(color)) {
+            setNewProduct({ ...newProduct, colors: current.filter(c => c !== color) });
+        } else {
+            setNewProduct({ ...newProduct, colors: [...current, color] });
+        }
+    };
+
+    const toggleSize = (size) => {
+        const current = [...newProduct.sizes];
+        if (current.includes(size)) {
+            setNewProduct({ ...newProduct, sizes: current.filter(s => s !== size) });
+        } else {
+            setNewProduct({ ...newProduct, sizes: [...current, size] });
+        }
+    };
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -56,7 +90,7 @@ const ProductManagerView = () => {
             },
             (error) => {
                 console.error("Upload error", error);
-                alert("ছবি আপলোড ফেইল হয়েছে। দয়া করে আবার চেষ্টা করুন বা সরাসরি লিংকের ব্যবহার করুন।");
+                alert("ছবি আপলোড ফেইল হয়েছে।");
                 setLoading(false);
             },
             async () => {
@@ -73,13 +107,11 @@ const ProductManagerView = () => {
         try {
             await addDoc(collection(db, "products"), {
                 ...newProduct,
-                colors: newProduct.colors.split(',').map(c => c.trim()),
-                sizes: newProduct.sizes.split(',').map(s => s.trim()),
                 price: parseInt(newProduct.price),
                 discountPrice: newProduct.discountPrice ? parseInt(newProduct.discountPrice) : null,
                 createdAt: serverTimestamp()
             });
-            setNewProduct({ name: '', category: 'haya', price: '', discountPrice: '', colors: '', sizes: '', imageUrl: '', stock: 'available', description: '' });
+            setNewProduct({ name: '', category: 'haya', price: '', discountPrice: '', colors: [], sizes: [], imageUrl: '', stock: 'available', description: '' });
             alert('প্রোডাক্ট সফলভাবে যোগ করা হয়েছে!');
         } catch (error) {
             console.error(error);
@@ -127,7 +159,7 @@ const ProductManagerView = () => {
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer z-30 w-full h-full" />
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 md:col-span-2">
                         <label className="text-xs font-black uppercase text-slate-400">অথবা ছবির সরাসরি লিংক দিন (URL)</label>
                         <div className="relative">
                             <ImageIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
@@ -135,14 +167,24 @@ const ProductManagerView = () => {
                         </div>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         <label className="text-xs font-black uppercase text-slate-400">কালেকশন / ক্যাটাগরি</label>
-                        <select value={newProduct.category} onChange={(e) => setNewProduct({...newProduct, category: e.target.value})} className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold appearance-none">
-                            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                        </select>
+                        <div className="flex gap-2">
+                           <select value={newProduct.category} onChange={(e) => setNewProduct({...newProduct, category: e.target.value})} className="flex-1 px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold appearance-none">
+                               {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                           </select>
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
+                        <label className="text-xs font-black uppercase text-slate-400">নতুন ক্যাটাগরি তৈরি করুন (দরকার হলে)</label>
+                        <div className="flex gap-2">
+                           <input type="text" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} placeholder="ক্যাটাগরি নাম..." className="flex-1 px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold" />
+                           <button type="button" onClick={handleAddCategory} className="bg-slate-900 text-white px-6 rounded-2xl font-bold uppercase text-[10px]">Add</button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
                         <label className="text-xs font-black uppercase text-slate-400">প্রোডাক্টের নাম / টাইটেল</label>
                         <input required type="text" value={newProduct.name} onChange={(e) => setNewProduct({...newProduct, name: e.target.value})} placeholder="যেমন: এক্সক্লুসিভ বোরকা..." className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold" />
                     </div>
@@ -153,18 +195,30 @@ const ProductManagerView = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-xs font-black uppercase text-slate-400">ডিসকাউন্ট প্রাইস (৳) - অপশনাল</label>
+                        <label className="text-xs font-black uppercase text-slate-400">ডিসকাউন্ট প্রাইস (৳)</label>
                         <input type="number" value={newProduct.discountPrice} onChange={(e) => setNewProduct({...newProduct, discountPrice: e.target.value})} placeholder="1250" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold text-xl" />
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-black uppercase text-slate-400">অ্যাভেইলেবল কালার (কমা দিয়ে লিখুন)</label>
-                        <input type="text" value={newProduct.colors} onChange={(e) => setNewProduct({...newProduct, colors: e.target.value})} placeholder="Black, Olive, Maroon" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold" />
+                    <div className="space-y-4 md:col-span-2">
+                        <label className="text-xs font-black uppercase text-slate-400">অ্যাভেইলেবল কালার (ড্রপডাউন সিলেক্ট)</label>
+                        <div className="flex flex-wrap gap-3">
+                            {commonColors.map(color => (
+                                <button type="button" key={color} onClick={() => toggleColor(color)} className={`px-6 py-3 rounded-full font-bold text-sm transition-all border-2 ${newProduct.colors.includes(color) ? 'bg-blue-600 text-white border-blue-600 shadow-lg scale-105' : 'bg-slate-50 text-slate-500 border-transparent hover:border-slate-200'}`}>
+                                    {color}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-black uppercase text-slate-400">অ্যাভেইলেবল সাইজ (কমা দিয়ে লিখুন)</label>
-                        <input type="text" value={newProduct.sizes} onChange={(e) => setNewProduct({...newProduct, sizes: e.target.value})} placeholder="52, 54, 56" className="w-full px-6 py-5 bg-slate-50 border-2 rounded-2xl outline-none focus:border-blue-500 font-bold" />
+                    <div className="space-y-4 md:col-span-2">
+                        <label className="text-xs font-black uppercase text-slate-400">অ্যাভেইলেবল সাইজ (ড্রপডাউন সিলেক্ট)</label>
+                        <div className="flex flex-wrap gap-3">
+                            {commonSizes.map(size => (
+                                <button type="button" key={size} onClick={() => toggleSize(size)} className={`px-6 py-3 rounded-full font-bold text-sm transition-all border-2 ${newProduct.sizes.includes(size) ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg scale-105' : 'bg-slate-50 text-slate-500 border-transparent hover:border-slate-200'}`}>
+                                    {size}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="space-y-2 md:col-span-2 border-t-2 pt-8 mt-4">
@@ -202,8 +256,8 @@ const ProductManagerView = () => {
                                 )}
                             </div>
                             <div className="flex flex-wrap gap-2 mt-4 text-[10px] font-black uppercase text-slate-500">
-                                <span className="px-3 py-1 bg-slate-100 rounded-full">{product.colors?.length} Colors</span>
-                                <span className="px-3 py-1 bg-slate-100 rounded-full">{product.sizes?.length} Sizes</span>
+                                <span className="px-3 py-1 bg-slate-100 rounded-full">{product.colors?.length || 0} Colors</span>
+                                <span className="px-3 py-1 bg-slate-100 rounded-full">{product.sizes?.length || 0} Sizes</span>
                             </div>
                             
                             <div className="mt-8 pt-6 border-t-2 border-slate-50 flex gap-4">
