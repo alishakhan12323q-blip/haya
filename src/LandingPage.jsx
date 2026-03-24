@@ -164,8 +164,8 @@ const LandingPage = () => {
         <div className="min-h-screen bg-premium-light font-bengali text-premium-dark overflow-x-hidden">
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 glass-morphism py-4 px-6 md:px-12 flex justify-between items-center">
-                <a href="/" className="flex items-center gap-2 cursor-pointer">
-                    <img src="/logo-dark.png" alt="NRzone Logo" className="h-[40px] md:h-[50px] object-contain" onError={(e)=>{e.target.style.display='none';}} />
+                <a href="/" className="flex items-center gap-2 cursor-pointer transition-transform hover:scale-110">
+                    <img src="/logo-dark.png" alt="NRzone Logo" className="h-[60px] md:h-[85px] lg:h-[105px] object-contain drop-shadow-md" onError={(e)=>{e.target.style.display='none';}} />
                 </a>
                 <div className="hidden md:flex gap-8 font-medium">
                     <a href="#features" className="hover:text-premium-gold transition-colors">কেন আমরা?</a>
@@ -682,10 +682,10 @@ const LandingPage = () => {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                         <div className="text-center md:text-left space-y-4">
                             <div className="text-3xl font-bold tracking-tighter text-black flex items-center justify-center md:justify-start gap-2">
-                                <ShoppingBag className="text-black" />
-                                <span>NRZOONE</span>
+                                <span>NR ZONE</span>
                             </div>
-                            <p className="text-gray-500 max-w-sm">প্রিমিয়াম কোয়ালিটি বোরকা এবং হিজাব কালেকশন। আমরা বিশ্বাস করি মডেস্টি মানেই আভিজাত্য।</p>
+                            <p className="text-gray-500 max-w-sm mt-4 font-bold border-l-2 border-slate-100 pl-4">Premium Modesty Lifestyle</p>
+                            <p className="text-gray-400 max-w-sm mt-2">সেরা কোয়ালিটি বোরকা এবং হিজাব কালেকশন। আমরা বিশ্বাস করি মডেস্টি মানেই আভিজাত্য।</p>
                         </div>
                         <div className="flex gap-4">
                             <a href="https://www.facebook.com/share/r/185GWnrgi3/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-premium-light flex items-center justify-center text-premium-dark hover:bg-premium-dark hover:text-white transition-all shadow-sm">

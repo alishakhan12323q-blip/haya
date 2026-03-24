@@ -82,7 +82,7 @@ const Home = () => {
                     <img 
                         src="/logo.jpg" 
                         alt="NRZOONE Logo" 
-                        className="h-12 md:h-16 object-contain mix-blend-difference invert"
+                        className="h-16 md:h-24 lg:h-28 object-contain mix-blend-difference invert drop-shadow-[0_10px_10px_rgba(0,0,0,0.15)]"
                         onError={(e) => {
                             e.target.style.display = 'none';
                             document.getElementById('fallback-text-logo').style.display = 'block';
@@ -95,9 +95,9 @@ const Home = () => {
 
                 {/* Center Nav Items */}
                 <nav className="hidden md:flex items-center gap-8 font-semibold text-sm">
-                    <button onClick={() => navigate('/haya')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Borka</button>
-                    <button onClick={() => navigate('/ma')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Abaya</button>
-                    <button onClick={() => navigate('/hijab')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Hijab</button>
+                    <button onClick={() => navigate('/haya')} className="hover:text-black transition-colors flex items-center gap-1">BORKA</button>
+                    <button onClick={() => navigate('/ma')} className="hover:text-black transition-colors flex items-center gap-1">ABAYA</button>
+                    <button onClick={() => navigate('/hijab')} className="hover:text-black transition-colors flex items-center gap-1">HIJAB</button>
                     <button className="hover:text-gray-500 transition-colors flex items-center gap-1">Store Locator</button>
                 </nav>
 
@@ -128,9 +128,9 @@ const Home = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="text-white text-5xl md:text-8xl font-black uppercase tracking-tight leading-[0.95] drop-shadow-2xl max-w-3xl"
+                        className="text-white text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.85] drop-shadow-[0_20px_20px_rgba(0,0,0,0.4)] max-w-4xl"
                     >
-                        STUNNING<br />BORKA
+                        PREMIUM<br />MODESTY
                     </motion.h2>
                     
                     <motion.button 
@@ -194,7 +194,7 @@ const Home = () => {
                     <img 
                         src="/logo.jpg" 
                         alt="NRZOONE Footer Logo" 
-                        className="h-10 object-contain mix-blend-difference invert"
+                        className="h-16 md:h-20 object-contain mix-blend-difference invert opacity-80"
                         onError={(e) => { e.target.style.display = 'none'; }}
                     />
                 </div>

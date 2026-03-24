@@ -490,9 +490,9 @@ const AdminDashboard = () => {
                 <div className="w-[148mm] min-h-[210mm] mx-auto border-[4px] border-black p-8 bg-white overflow-hidden relative">
                     <div className="flex justify-between items-start border-b-[8px] border-black pb-10 mb-10">
                         <div>
-                            <h1 className="text-6xl font-black tracking-tighter mb-3 leading-none italic underline decoration-blue-600 underline-offset-8">NR ZONE</h1>
-                            <p className="text-base font-black uppercase tracking-[0.4em] text-slate-900 mt-6">Premium Modesty Lifestyle</p>
-                            <p className="text-sm mt-6 font-bold flex items-center gap-2 italic">Official Contact: +880 1783-155897</p>
+                            <h1 className="text-7xl font-black tracking-tighter mb-4 leading-none italic underline decoration-blue-600 underline-offset-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]">NR ZONE</h1>
+                            <p className="text-lg font-black uppercase tracking-[0.5em] text-slate-900 mt-6 border-l-4 border-black pl-4">Premium Modesty Lifestyle</p>
+                            <p className="text-sm mt-8 font-extrabold flex items-center gap-2 italic text-slate-600">Official Contact: +880 1783-155897</p>
                         </div>
                         <div className="text-right flex flex-col items-end">
                             <h2 className="text-3xl font-black uppercase mb-2 tracking-[0.2em] bg-black text-white px-6 py-2">Invoice</h2>
@@ -1003,8 +1003,9 @@ const AdminDashboard = () => {
             {/* Sidebar */}
             <div className={`fixed no-print md:sticky top-0 left-0 h-screen w-80 bg-[#0C0C0C] text-white z-50 transform transition-transform duration-700 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-[40px_0_80px_rgba(0,0,0,0.2)] flex flex-col`}>
                 <div className="p-10 border-b border-white/5 flex flex-col items-center shrink-0">
-                    <img src="/logo-white.png" alt="NRZOONE" className="h-16 object-contain" />
-                    <div className="mt-8 flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                    <img src="/logo-white.png" alt="NRZOONE" className="h-24 object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]" />
+                    <div className="mt-8 flex flex-col items-center gap-3">
+                        <h2 className="text-2xl font-black italic tracking-tighter text-white">NR ZONE</h2>
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></span>
                         <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Live Engine Active</p>
                     </div>
@@ -1035,7 +1036,7 @@ const AdminDashboard = () => {
             {/* Content Area */}
             <div className="flex-1 min-h-screen p-8 md:p-16 lg:p-20 overflow-y-auto noscroll">
                 <div className="md:hidden no-print flex justify-between items-center mb-12">
-                    <h1 className="text-3xl font-black italic underline decoration-blue-600 underline-offset-4">NRZOONE</h1>
+                    <h1 className="text-4xl font-black italic underline decoration-blue-600 underline-offset-4 tracking-tighter">NR ZONE</h1>
                     <button onClick={() => setIsMobileMenuOpen(true)} className="p-4 bg-white rounded-3xl shadow-xl border-2 border-slate-50"><Menu size={28} /></button>
                 </div>
 
