@@ -479,9 +479,15 @@ const AdminDashboard = () => {
     const PrintInvoice = ({ order }) => {
         if (!order) return null;
         return (
-            <div className="hidden print:block fixed inset-0 bg-white z-[9999] p-12 font-sans text-black">
-                <style>{`@media print { .no-print { display: none !important; } body { margin: 0; padding: 0; } }`}</style>
-                <div className="max-w-[850px] mx-auto border-[6px] border-black p-12">
+            <div className="hidden print:block fixed inset-0 bg-white z-[9999] font-sans text-black">
+                <style>{`
+                    @media print { 
+                        @page { size: A5; margin: 0; }
+                        .no-print { display: none !important; } 
+                        body { margin: 0; padding: 0; } 
+                    }
+                `}</style>
+                <div className="w-[148mm] min-h-[210mm] mx-auto border-[4px] border-black p-8 bg-white overflow-hidden relative">
                     <div className="flex justify-between items-start border-b-[8px] border-black pb-10 mb-10">
                         <div>
                             <h1 className="text-6xl font-black tracking-tighter mb-3 leading-none italic underline decoration-blue-600 underline-offset-8">NR ZONE</h1>

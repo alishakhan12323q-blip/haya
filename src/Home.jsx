@@ -1,201 +1,208 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ChevronRight, Compass } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Search, User, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const navigate = useNavigate();
-    const { scrollY } = useScroll();
-    const y1 = useTransform(scrollY, [0, 1000], [0, 150]);
 
-    // High Fashion Asymmetrical Grid Layout Data
     const collections = [
         {
-            id: 'faiza',
-            title: 'ফাইজা বোরকা',
-            subtitle: 'LIMITED EDITION',
-            description: 'প্রিমিয়াম দুবাই চেরি কাপড়ের গর্জিয়াস স্টোনের ডিজাইন করা এক্সক্লুসিভ বোরকা।',
-            image: '/faiza_black.jpg',
-            price: '৮৯০ ৳',
-            path: '/faiza',
-            span: 'col-span-1 md:col-span-2 row-span-2 h-[600px] md:h-[800px]',
-            theme: 'dark'
-        },
-        {
-            id: 'haya',
-            title: 'হায়া সিরিজ',
-            subtitle: 'ESSENTIALS',
-            description: 'এলিগ্যান্ট ডিজাইন ও প্রিমিয়াম ফেব্রিক। শুধুমাত্র বোরকা অথবা হিজাবসহ সেট।',
-            image: '/hero_black.jpg',
-            price: '১৩৫০ ৳',
-            path: '/haya',
-            span: 'col-span-1 md:col-span-1 row-span-1 h-[400px]',
-            theme: 'light'
+            id: 'ma',
+            title: 'মা কালেকশন বোরকা ডিজাইন',
+            image: '/ma_cherry_black.png',
+            oldPrice: '১,৬৯০',
+            price: '১,১৯০',
+            path: '/ma',
         },
         {
             id: 'classic',
-            title: 'মা-মেয়ে কম্বো',
-            subtitle: 'MATCHING SET',
-            description: 'মা ও মেয়ের ম্যাচিং স্পেশাল কম্বো সেট। আমাদের সবচেয়ে জনপ্রিয় কালেকশন।',
+            title: 'মা-মেয়ে স্পেশাল কম্বো বোরকা ডিজাইন',
             image: '/classic_combo_main.jpg',
-            price: '১৬৮০ ৳',
+            oldPrice: '২,২০০',
+            price: '১,৬৮০',
             path: '/classic',
-            span: 'col-span-1 md:col-span-1 row-span-1 h-[400px]',
-            theme: 'dark'
-        },
-        {
-            id: 'ma',
-            title: 'মা কালেকশন',
-            subtitle: 'PREMIUM COMFORT',
-            description: 'মায়েদের জন্য প্রিমিয়াম আরামদায়ক বোরকা।',
-            image: '/ma_cherry_black.png',
-            price: '১১৯০ ৳',
-            path: '/ma',
-            span: 'col-span-1 md:col-span-1 row-span-1 h-[500px]',
-            theme: 'light'
         },
         {
             id: 'kids',
-            title: 'কিডস কালেকশন',
-            subtitle: 'FOR THE LITTLE ONES',
-            description: 'ছোটদের স্পেশাল বোরকা ও স্টাইলিশ হিজাব সেট। প্রিমিয়াম চেরি ফ্যাব্রিক।',
+            title: 'কিডস কালেকশন বোরকা ডিজাইন',
             image: '/kids_hero.jpg', 
-            price: '৬৯০ ৳',
+            oldPrice: '৮৯০',
+            price: '৬৯০',
             path: '/kids',
-            span: 'col-span-1 md:col-span-1 row-span-1 h-[500px]',
-            theme: 'dark'
+        },
+        {
+            id: 'borobon',
+            title: 'বড়বোন বোরকা ডিজাইন',
+            image: '/boro_bon_black.jpg',
+            oldPrice: '১,২৯০',
+            price: '৯৯০',
+            path: '/borobon',
+        },
+        {
+            id: 'maboromeye',
+            title: 'মা ও বড়মেয়ে কম্বো বোরকা',
+            image: '/ma_boro_meye_black.jpg',
+            oldPrice: '১,১৯০',
+            price: '৮৯০',
+            path: '/maboromeye',
+        },
+        {
+            id: 'faiza',
+            title: 'ফাইজা এক্সক্লুসিভ বোরকা ডিজাইন উইথ স্টোন ওয়ার্ক',
+            image: '/faiza_black.jpg',
+            oldPrice: '১,১৯০',
+            price: '৮৯০',
+            path: '/faiza',
+        },
+        {
+            id: 'haya',
+            title: 'হায়া সিরিজ বোরকা ডিজাইন',
+            image: '/hero_black.jpg',
+            oldPrice: '১,৯৫০',
+            price: '১,৩৫০',
+            path: '/haya',
         },
         {
             id: 'hijab',
-            title: 'হিজাব কালেকশন',
-            subtitle: 'EXCLUSIVE HIJAB',
-            description: '৪৬/৭২/৮০ ইঞ্চি সাইজের প্রিমিয়াম হিজাব কালেকশন।',
+            title: 'প্রিমিয়াম হিজাব কালেকশন',
             image: '/hero_maroon.jpg', 
-            price: '২৫০ ৳',
+            oldPrice: '৪৫০',
+            price: '২৫০',
             path: '/hijab',
-            span: 'col-span-1 md:col-span-1 row-span-1 h-[500px]',
-            theme: 'light'
         }
     ];
 
     return (
-        <div className="min-h-screen bg-white font-sans text-black overflow-x-hidden selection:bg-black selection:text-white">
-            
-            {/* Minimalist Top Navigation / Header */}
-            <header className="w-full py-8 md:py-12 px-6 md:px-12 flex flex-col items-center justify-center border-b border-black/10 relative bg-white z-50">
-                <motion.div 
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="flex flex-col items-center"
-                >
-                    {/* LOGO: Requires logo-dark.png in public folder */}
+        <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden">
+            {/* Navigation Header */}
+            <header className="sticky top-0 z-50 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-12 py-4">
+                {/* Logo Area */}
+                <div className="flex flex-col sm:flex-row items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
                     <img 
-                        src="/logo-dark.png" 
-                        alt="NRzone Women's Clothing" 
-                        className="h-20 md:h-32 object-contain mb-4"
+                        src="/logo.jpg" 
+                        alt="NRZOONE Logo" 
+                        className="h-12 md:h-16 object-contain mix-blend-difference invert"
                         onError={(e) => {
-                            e.target.onerror = null; 
                             e.target.style.display = 'none';
-                            document.getElementById('fallback-logo').style.display = 'block';
+                            document.getElementById('fallback-text-logo').style.display = 'block';
                         }}
                     />
-                    <h1 id="fallback-logo" className="hidden text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-black">
+                    <h1 id="fallback-text-logo" className="hidden text-2xl md:text-3xl font-black tracking-tighter uppercase whitespace-nowrap">
                         NRZOONE
                     </h1>
-                    <div className="flex items-center gap-6 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500">
-                        <span>Modest</span>
-                        <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                        <span>Elegant</span>
-                        <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                        <span>Premium</span>
+                </div>
+
+                {/* Center Nav Items */}
+                <nav className="hidden md:flex items-center gap-8 font-semibold text-sm">
+                    <button onClick={() => navigate('/haya')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Borka</button>
+                    <button onClick={() => navigate('/ma')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Abaya</button>
+                    <button onClick={() => navigate('/hijab')} className="hover:text-gray-500 transition-colors flex items-center gap-1">Hijab</button>
+                    <button className="hover:text-gray-500 transition-colors flex items-center gap-1">Store Locator</button>
+                </nav>
+
+                {/* Right Icons */}
+                <div className="flex items-center gap-4 md:gap-5">
+                    <Search className="w-5 h-5 cursor-pointer hover:text-gray-500 transition" />
+                    <User className="w-5 h-5 cursor-pointer hover:text-gray-500 transition hidden sm:block" />
+                    <div className="relative">
+                        <ShoppingBag className="w-5 h-5 cursor-pointer hover:text-gray-500 transition" />
+                        <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                            0
+                        </span>
                     </div>
-                </motion.div>
+                </div>
             </header>
 
-            {/* Aesthetic Grid Showcase */}
-            <div className="max-w-[1600px] mx-auto p-4 md:p-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 auto-rows-min">
+            {/* Hero Section */}
+            <section className="relative w-full h-[500px] md:h-[700px] overflow-hidden bg-[#e6e2db]">
+                <img 
+                    src="/classic_combo_main.jpg" 
+                    alt="Hero Borka" 
+                    className="absolute inset-0 w-full h-full object-cover object-[center_25%]"
+                />
+                <div className="absolute inset-0 bg-black/30" /> {/* Subtle overlay to ensure text readability */}
+                
+                <div className="absolute inset-0 max-w-[1600px] mx-auto px-6 md:px-16 py-24 flex flex-col justify-center">
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-white text-5xl md:text-8xl font-black uppercase tracking-tight leading-[0.95] drop-shadow-2xl max-w-3xl"
+                    >
+                        STUNNING<br />BORKA
+                    </motion.h2>
                     
-                    {collections.map((item, index) => (
-                        <motion.div
-                            key={item.id}
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8, delay: index * 0.1 }}
-                            onClick={() => navigate(item.path)}
-                            className={`group relative overflow-hidden cursor-pointer bg-slate-100 ${item.span}`}
-                        >
-                            <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[1.5s] ease-out transform group-hover:scale-105"
-                            />
-                            
-                            {/* Overlay dynamically changing based on light/dark theme preference for the image cell */}
-                            <div className={`absolute inset-0 flex flex-col justify-end p-8 md:p-12 transition-all duration-700
-                                ${item.theme === 'dark' 
-                                    ? 'bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white' 
-                                    : 'bg-gradient-to-t from-white/95 via-white/50 to-transparent text-black opacity-0 group-hover:opacity-100'
-                                }
-                            `}>
-                                <motion.div 
-                                    className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500"
-                                >
-                                    <p className={`text-[10px] font-black uppercase tracking-[0.4em] mb-3 ${item.theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
-                                        {item.subtitle}
-                                    </p>
-                                    <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight mb-4 leading-none">
-                                        {item.title}
-                                    </h2>
-                                    <p className={`text-sm md:text-base font-semibold max-w-md hidden md:block mb-8 ${item.theme === 'dark' ? 'text-white/80' : 'text-black/80'}`}>
-                                        {item.description}
-                                    </p>
-                                    
-                                    <div className={`inline-flex items-center gap-6 border-b-2 pb-2 ${item.theme === 'dark' ? 'border-white' : 'border-black'}`}>
-                                        <div className="flex flex-col">
-                                            <span className={`text-[9px] uppercase tracking-widest font-black ${item.theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>Starting At</span>
-                                            <span className="text-2xl font-black">{item.price}</span>
-                                        </div>
-                                        <ArrowRight className="w-8 h-8 transform group-hover:translate-x-4 transition-transform duration-500" />
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    ))}
-
-                </div>
-            </div>
-
-            {/* Newsletter / Minimal CTA Section */}
-            <section className="bg-black text-white py-24 px-6 md:px-12 mt-12 md:mt-24 text-center">
-                <div className="max-w-3xl mx-auto space-y-8">
-                    {/* Footer Logo: Requires logo-light.png in public folder */}
-                    <img 
-                        src="/logo-light.png" 
-                        alt="NRzone Logo" 
-                        className="h-16 md:h-20 mx-auto object-contain mb-8 filter brightness-0 invert"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                    <Compass className="mx-auto w-12 h-12 text-white/20 mb-6 group-hover:rotate-180 transition-all duration-1000" />
-                    <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight">Elegance in Every Thread</h2>
-                    <p className="text-white/60 text-lg md:text-xl font-medium tracking-wide">
-                        Explore our latest collections carefully crafted for the modern, modest woman. 
-                    </p>
-                    <button onClick={() => navigate('/haya')} className="mt-10 px-12 py-5 bg-white text-black text-sm uppercase tracking-[0.2em] font-black hover:bg-slate-200 transition-colors">
-                        Shop All Collections
-                    </button>
+                    <motion.button 
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        onClick={() => navigate('/haya')}
+                        className="mt-8 md:mt-12 flex items-center gap-4 bg-[#1a1a1a] text-white px-6 py-3 md:px-8 md:py-4 w-max hover:bg-black transition-all group"
+                    >
+                        <span className="text-xs md:text-sm uppercase tracking-widest font-semibold flex-1 text-left">Collection 2026</span>
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                    </motion.button>
                 </div>
             </section>
 
-            {/* Minimal Footer */}
-            <footer className="bg-white text-black py-12 px-12 flex flex-col md:flex-row justify-between items-center text-xs font-black uppercase tracking-[0.2em]">
-                <p>© 2026 NRZOONE</p>
-                <div className="flex gap-8 mt-6 md:mt-0">
-                    <a href="#" className="hover:text-slate-500 transition-colors">Facebook</a>
-                    <a href="#" className="hover:text-slate-500 transition-colors">Instagram</a>
-                    <a href="/admin" className="hover:text-slate-500 transition-colors">Admin</a>
+            {/* Product Grid */}
+            <section className="max-w-[1600px] mx-auto px-6 md:px-12 py-20">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                    {collections.map((item, index) => (
+                        <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "100px" }}
+                            transition={{ delay: index * 0.1, duration: 0.6 }}
+                            className="group cursor-pointer flex flex-col"
+                            onClick={() => navigate(item.path)}
+                        >
+                            {/* Image Container */}
+                            <div className="w-full aspect-[3/4] overflow-hidden bg-gray-100 mb-4 relative">
+                                <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out transform group-hover:scale-[1.03]"
+                                />
+                            </div>
+                            
+                            {/* Text Container */}
+                            <div className="flex space-y-1.5 flex-col flex-1 text-left">
+                                <h3 className="text-[15px] font-semibold text-gray-800 leading-snug line-clamp-2 hover:text-black transition-colors">
+                                    {item.title}
+                                </h3>
+                                
+                                <div className="flex items-center gap-2 mt-auto pt-1">
+                                    <span className="text-gray-400 text-sm line-through decoration-gray-300">
+                                        ৳ {item.oldPrice}
+                                    </span>
+                                    <span className="text-black font-bold text-base">
+                                        ৳ {item.price}
+                                    </span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Footer Placeholder for completeness */}
+            <footer className="w-full py-10 px-6 mt-10 border-t border-gray-100 flex flex-col items-center justify-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center gap-4 mb-2">
+                    <img 
+                        src="/logo.jpg" 
+                        alt="NRZOONE Footer Logo" 
+                        className="h-10 object-contain mix-blend-difference invert"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                </div>
+                <p className="font-bold">© 2026 NRZOONE | All Rights Reserved</p>
+                <div className="flex gap-6 mt-2">
+                    <a href="#" className="hover:text-black transition-colors">Terms of Service</a>
+                    <a href="#" className="hover:text-black transition-colors">Privacy Policy</a>
+                    <a href="/admin" className="hover:text-black transition-colors">Admin Dashboard</a>
                 </div>
             </footer>
         </div>
