@@ -1003,7 +1003,7 @@ const AdminDashboard = () => {
             {/* Sidebar */}
             <div className={`fixed no-print md:sticky top-0 left-0 h-screen w-80 bg-[#0C0C0C] text-white z-50 transform transition-transform duration-700 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} shadow-[40px_0_80px_rgba(0,0,0,0.2)] flex flex-col`}>
                 <div className="p-10 border-b border-white/5 flex flex-col items-center shrink-0">
-                    <h1 className="text-4xl font-black tracking-tighter italic text-white underline decoration-blue-600 decoration-4 underline-offset-8">NRZOONE</h1>
+                    <img src="/logo-white.png" alt="NRZOONE" className="h-16 object-contain" />
                     <div className="mt-8 flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></span>
                         <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Live Engine Active</p>
